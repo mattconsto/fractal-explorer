@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="." destdir="javadoc" doctitle="Fractal Explorer" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="mc21g14.fractal.colorable,mc21g14.fractal.misc,mc21g14.colorpicker,mc21g14.fractal.calculable" source="1.7" sourcefiles="src/Launcher.java" sourcepath="src" splitindex="true" use="true" version="false" encoding="utf-8">
+    		<arg value="-notimestamp" />
+        </javadoc>
+    </target>
+</project>
