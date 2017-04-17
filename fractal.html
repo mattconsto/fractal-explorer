@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Fractal</title>
+		<style>
+			html, body, canvas {
+				height:   100%;
+				width:    100%;
+				padding:  0;
+				margin:   0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas>Your browser doesn't support HTML5 and is unable to view this fractal.</canvas>
+		<script>
+			var draw = function(ctx, start, stop, top, bottom, iterations, threshold) {
+				// Fill canvas with a red background so everything is painted
+				ctx.fillStyle = "rgb(255, 255, 255)";
+				ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+				// We need to iterate over every single pixel
+				for(var x = 0; x < ctx.canvas.width; x++) {
+					for(var y = 0; y < ctx.canvas.height; y++) {
+						// Calculate our base complex which we will add each time
+						var baser = start + (stop   - start) * x / ctx.canvas.width;
+						var basei = top   + (bottom - top)   * y / ctx.canvas.height;
+						
+						var pastr = baser;
+						var pasti = basei;
+						
+						for(var i = 0; i < iterations; i++) {
+							// Calculate the current complex by squaring and adding the base complex
+							var currentr = baser + pastr * pastr - pasti * pasti;
+							var currenti = basei + 2.0 * pastr * pasti;
+							var currentm = Math.sqrt(currentr * currentr + currenti * currenti);
+							
+							if(currentm > threshold) {
+								var pastm = Math.sqrt(pastr * pastr + pasti * pasti);
+								
+								// Smooth(er) colouring, lets iterate again!
+								for(var j = 0; j <= iterations; j++) {
+									var k = 1.0 * j / iterations;
+									if(pastm + (currentm - pastm) * k > threshold) {
+										var value = Math.round(255 * (i + k) / iterations);
+										ctx.fillStyle = "rgb(255, " + value + ", " + value + ")";
+										ctx.fillRect(x, y, 1, 1);
+										break;
+									}
+								}
+								break;
+							}
+							
+							pastr = currentr;
+							pasti = currenti;
+						}
+					}
+				}
+			}
+
+			// JavaScript boilerplate
+			var ctx = document.getElementsByTagName("canvas")[0].getContext("2d");
+			ctx.canvas.width  = window.innerWidth;
+			ctx.canvas.height = window.innerHeight;
+
+			// Time how long it takes
+			var time = new Date().getTime();
+			draw(ctx, -2.5, 1, 1.6, -1.6, 50, 2);
+			time = new Date().getTime() - time;
+			console.log("Took " + time + "ms to render");
+		</script>
+	</body>
+</html>
