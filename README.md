@@ -1,7 +1,9 @@
 Fractal Explorer
 ================
 
-A java, gpu accelerated fractal explorer.
+A Java, GPU accelerated fractal explorer.
+
+![](exported/Still%20Burning.png)
 
 # Usage
 
@@ -32,6 +34,6 @@ A java, gpu accelerated fractal explorer.
 
 ### Mouse
 
- You can drag the mouse to select a region of the fractal to zoom into, and use the scroll-wheel to 
+ You can drag the mouse to select a region of the fractal to zoom into, and use the scroll-wheel to
  zoom in and out of the fractal. If you click on the fractal the selected point and julia set will
  then update the selected point.
