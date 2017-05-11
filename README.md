@@ -3,7 +3,7 @@ Fractal Explorer
 
 A Java, GPU accelerated fractal explorer.
 
-![](exported/Still%20Burning.png)
+![](screenshot.png)
 
 # Usage
 
