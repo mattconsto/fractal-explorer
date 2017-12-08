@@ -17,10 +17,10 @@ import org.jocl.*;
  * @author Matthew Consterdine
  */
 public class OpenCLCalculator extends Calculable {
-	protected cl_context       context;
+	protected cl_context	   context;
 	protected cl_command_queue queue;
-	protected cl_program       program;
-	protected cl_kernel        kernel;
+	protected cl_program	   program;
+	protected cl_kernel		kernel;
 	
 	public OpenCLCalculator() throws IOException {
 		// Enable exceptions and subsequently omit error checks in this sample
@@ -72,41 +72,41 @@ public class OpenCLCalculator extends Calculable {
 	}
 	
 	@Override
-    public String[] getImplementedFractals() {
-	    return new String[] {"Mandlebrot", "Burning Ship", "Tricorn", "Nova", "Circle"};
-    }
+	public String[] getImplementedFractals() {
+		return new String[] {"Mandlebrot", "Burning Ship", "Tricorn", "Nova", "Circle"};
+	}
 	
 	@Override
 	protected double[] calculate(FractalState state, Dimension size) {
-    	if(state.fractal == null) state.fractal = getImplementedFractals()[0];
-    	
+		if(state.fractal == null) state.fractal = getImplementedFractals()[0];
+		
 		double[] results = new double[size.width * size.height];
 		
 		// Get various indexes, we can't pass strings to openCL. It only understands char[]
 		int fractalIndex = 0;
 		for(int i = 0; i < getImplemented().length; i++) {
-		    if(getImplemented()[i].equals(state.fractal)) {
-		        fractalIndex = i;
-		        break;
-		    }
+			if(getImplemented()[i].equals(state.fractal)) {
+				fractalIndex = i;
+				break;
+			}
 		}
 		
-		int      orbitIndex = 0;
-		String[] orbits     = new String[] {"None", "Cross", "Dots"};
+		int	  orbitIndex = 0;
+		String[] orbits	 = new String[] {"None", "Cross", "Dots"};
 		for(int i = 0; i < orbits.length; i++) {
-		    if(orbits[i].equals(state.orbitTraps)) {
-		        orbitIndex = i;
-		        break;
-		    }
+			if(orbits[i].equals(state.orbitTraps)) {
+				orbitIndex = i;
+				break;
+			}
 		}
 		
-		int      regionIndex = 0;
-		String[] regions     = new String[] {"None", "Iterations", "Axis"};
+		int	  regionIndex = 0;
+		String[] regions	 = new String[] {"None", "Iterations", "Axis"};
 		for(int i = 0; i < regions.length; i++) {
-		    if(regions[i].equals(state.regionSplits)) {
-		        regionIndex = i;
-		        break;
-		    }
+			if(regions[i].equals(state.regionSplits)) {
+				regionIndex = i;
+				break;
+			}
 		}
 		
 		// Allocate the memory objects for the input- and output data
@@ -115,19 +115,19 @@ public class OpenCLCalculator extends Calculable {
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.end}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.top}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.bottom}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{size.width}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{size.height}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{state.iterations}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{size.width}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{size.height}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.iterations}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.threshold}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{state.smooth ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.smooth ? 1 : 0}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.seed != null ? state.seed.r : Double.MAX_VALUE}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.seed != null ? state.seed.i : Double.MAX_VALUE}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{fractalIndex}), null),//selected
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{state.order}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{state.inverse ? 1 : 0}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{state.buddha ? 1 : 0}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{orbitIndex}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,    Pointer.to(new int   []{regionIndex}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{fractalIndex}), null),//selected
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.order}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.inverse ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.buddha ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{orbitIndex}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{regionIndex}), null),
 			clCreateBuffer(context, CL_MEM_WRITE_ONLY, Sizeof.cl_double * size.width * size.height, null, null)
 		};
 		
@@ -148,7 +148,7 @@ public class OpenCLCalculator extends Calculable {
 	
 	protected void finalize() throws Throwable {
 		// OpenCL requires a cleanup after it runs
-	    super.finalize();
+		super.finalize();
 		clReleaseCommandQueue(queue);
 		clReleaseContext(context);
 		clReleaseKernel(kernel);

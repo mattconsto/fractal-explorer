@@ -8,7 +8,7 @@ import mc21g14.fractal.misc.FractalState;
 
 class JavaRunnable implements Runnable {
 	protected FractalState state;
-	protected Dimension    size;
+	protected Dimension size;
 	
 	protected double[] results;
 	
@@ -20,16 +20,16 @@ class JavaRunnable implements Runnable {
 		this.state   = state;
 		this.size    = size;
 		this.results = results;
-        this.total   = total;
-        this.id      = id;
-    }
+		this.total   = total;
+		this.id      = id;
+	}
 	
 	@Override
-    public void run() {
-    	// Save a little time later
-    	double threshold = state.threshold * state.threshold;
-    	
-    	// Iterate only over the pixels we are 
+	public void run() {
+		// Save a little time later
+		double threshold = state.threshold * state.threshold;
+		
+		// Iterate only over the pixels we are 
 		for(int x = id * size.width / total; x < (id + 1) * size.width / total; x++) {
 			for(int y = 0; y < size.height; y++) {
 				// We need a base complex and a past complex for each iteration
@@ -41,13 +41,13 @@ class JavaRunnable implements Runnable {
 				
 				// Inverse the base value, for pretty images
 				if(state.inverse) {
-    				base = base.inverse();
-    				past = past.inverse();
+					base = base.inverse();
+					past = past.inverse();
 				}
 				
 				// For orbit traps
-			    double distance[] = new double[state.regionSplits.equals("Iterations") ? 5 : (state.regionSplits.equals("Axis") ? 4 : 1)];
-			    Arrays.fill(distance, Double.MAX_VALUE);
+				double distance[] = new double[state.regionSplits.equals("Iterations") ? 5 : (state.regionSplits.equals("Axis") ? 4 : 1)];
+				Arrays.fill(distance, Double.MAX_VALUE);
 				
 				for(int i = 1; i < state.iterations; i++) {
 					Complex current = null;
@@ -64,13 +64,11 @@ class JavaRunnable implements Runnable {
 							current = new Complex(past.r, past.i * -1).pow(state.order).add(base);
 							break;
 						case "Nova": // Not 100% sure that this is correct, but oh well, it looks nice, if slow
-							current = past.subtract(
-								          new Complex(1, 0).multiply(
-								        	  past.pow(state.order).subtract(new Complex(1, 0))
-								          ).divide(
-								        	  new Complex(state.order, 0).multiply(past.pow(state.order - 1))
-								          )
-									  ).add(base);
+							current = past.subtract(new Complex(1, 0).multiply(
+									past.pow(state.order).subtract(new Complex(1, 0))
+								).divide(
+									new Complex(state.order, 0).multiply(past.pow(state.order - 1))
+								)).add(base);
 							break;
 						case "Circle":
 							// Why not :D
@@ -82,12 +80,12 @@ class JavaRunnable implements Runnable {
 					
 					if(state.buddha) {
 						// Buddha colouring, slow
-    					int j = (int) ((size.width  * (current.r - state.start)) / (state.end    - state.start));
-    					int k = (int) ((size.height * (current.i - state.top))   / (state.bottom - state.top));
-    					
-    					if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) {
-    						results[k * size.width + j]++;
-    					}
+						int j = (int) ((size.width  * (current.r - state.start)) / (state.end	- state.start));
+						int k = (int) ((size.height * (current.i - state.top))   / (state.bottom - state.top));
+						
+						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) {
+							results[k * size.width + j]++;
+						}
 					} else if(!state.orbitTraps.equals("None")) {
 						// Trap our orbits
 						if(state.orbitTraps.equals("Cross")) {
@@ -130,5 +128,5 @@ class JavaRunnable implements Runnable {
 				}
 			}
 		}
-    }
+	}
 }

@@ -1,9 +1,7 @@
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
 double __attribute__((overloadable)) abs(double value) {
-	if(value >= 0)
-		return value;
-	
+	if(value >= 0) return value;
 	return 0 - value;
 }
 
@@ -65,8 +63,8 @@ struct complex mulComplex(struct complex a, struct complex b) {
 }
 
 struct complex divComplex(struct complex a, struct complex b) {
-	double temp = b.r*b.r + b.i*b.i;
-	return newComplex((a.r*b.r + a.i*b.i)/temp, (a.i*b.r - a.r*b.i)/temp);
+	double inter = b.r*b.r + b.i*b.i;
+	return newComplex((a.r*b.r + a.i*b.i)/inter, (a.i*b.r - a.r*b.i)/inter);
 }
 
 struct complex invComplex(struct complex c) {
@@ -125,8 +123,8 @@ kernel void fractalKernel(
 		
 		/* For orbit traps */
 		int    distancelength = *region == 1 ? 5 : (*region == 2 ? 4 : 1);
-	    double distance[5];
-	    for(int i = 0; i < distancelength; i++) distance[i] = DBL_MAX;
+		double distance[5];
+		for(int i = 0; i < distancelength; i++) distance[i] = DBL_MAX;
 		
 		for(int i = 1; i < *iterations; i++) {
 			/* Square complex1, then add complex2 */
@@ -162,14 +160,14 @@ kernel void fractalKernel(
 				
 			/* Modulus */
 			double modulus = mod2Complex(current);
-		    
-		    if(*buddha) {
-		    	// Buddha colouring, slow
-    			int j = (int) ((*width  * (current.r - *start)) / (*stop   - *start));
-    			int k = (int) ((*height * (current.i - *top))   / (*bottom - *top));
-    			
-    			if(k * *width + j >= 0 && k * *width + j < *width * *height)
-    				results[k * *width + j] = results[k * *width + j] + 1;
+
+			if(*buddha) {
+				// Buddha colouring, slow
+				int j = (int) ((*width  * (current.r - *start)) / (*stop   - *start));
+				int k = (int) ((*height * (current.i - *top))   / (*bottom - *top));
+				
+				if(k * *width + j >= 0 && k * *width + j < *width * *height)
+				results[k * *width + j] = results[k * *width + j] + 1;
 			} else if(*orbit) {
 				if(*orbit == 1) {
 					if(current.r*current.r < distance[i % distancelength]) distance[i % distancelength] = current.r*current.r;
@@ -194,7 +192,7 @@ kernel void fractalKernel(
 					}
 					break;
 				}
-		    } else {
+			} else {
 				if(modulus > t) {
 					if(*smooth) {
 						double k = (t - mod2Complex(past)) / abs(mod2Complex(past) - mod2Complex(current));

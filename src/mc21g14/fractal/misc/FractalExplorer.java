@@ -41,7 +41,7 @@ public class FractalExplorer {
 	 * @return List of favourites
 	 */
 	@SuppressWarnings("unchecked")
-    protected ArrayList<FractalState> loadFavourites(File file) {
+	protected ArrayList<FractalState> loadFavourites(File file) {
 		ArrayList<FractalState> favourites = new ArrayList<FractalState>();
 		
 		// Object(Input/Output)Stream is great and so easy to use
@@ -81,37 +81,37 @@ public class FractalExplorer {
 		
 		for(final FractalState fav : favourites) {
 			// Create a fractal
-        	final Fractal temp = new Fractal(fav);
-        	temp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        	
-        	// Set the listeners we want
-        	temp.removeMouseListener(temp);
-        	temp.removeMouseMotionListener(temp);
-        	temp.removeMouseWheelListener(temp);
-        	temp.removeKeyListener(temp);
-        	temp.addMouseListener(new MouseAdapter() {
-        		public void mousePressed(MouseEvent e) {
-        			if(e.getButton() == MouseEvent.BUTTON1) {
-        				// Left click, load the fractal
-	        			fractal.setState(temp.getState());
-	        			fractal.setColoring(fractal.getColoring().clone());
-        				settingsFrame.updateColorSettings();
-        				fractal.getColoring().removeAllListeners();
-        				fractal.getColoring().addActionListener(new ActionListener() {
+			final Fractal temp = new Fractal(fav);
+			temp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+			// Set the listeners we want
+			temp.removeMouseListener(temp);
+			temp.removeMouseMotionListener(temp);
+			temp.removeMouseWheelListener(temp);
+			temp.removeKeyListener(temp);
+			temp.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					if(e.getButton() == MouseEvent.BUTTON1) {
+						// Left click, load the fractal
+						fractal.setState(temp.getState());
+						fractal.setColoring(fractal.getColoring().clone());
+						settingsFrame.updateColorSettings();
+						fractal.getColoring().removeAllListeners();
+						fractal.getColoring().addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								fractal.repaint();
 							}
 						});
-        			} else if(e.getButton() == MouseEvent.BUTTON3) {
-        				// Right click, delete the fractal
-        				panel.remove(temp);
-        				panel.updateUI();
-        				favourites.remove(fav);
-        			}
-        		};
-        	});
-            panel.add(temp);
+					} else if(e.getButton() == MouseEvent.BUTTON3) {
+						// Right click, delete the fractal
+						panel.remove(temp);
+						panel.updateUI();
+						favourites.remove(fav);
+					}
+				};
+			});
+			panel.add(temp);
 		}
 		
 		// It is done
@@ -145,7 +145,7 @@ public class FractalExplorer {
 			sizeX.selectAll();
 		}});
 		sizeY.addFocusListener(new FocusAdapter() {@Override public void focusGained(FocusEvent e) {
-		    sizeY.selectAll();
+			sizeY.selectAll();
 		}});
 		
 		// Close the frame on cancel
@@ -174,67 +174,67 @@ public class FractalExplorer {
 					new Thread(new Runnable() {
 						@Override public void run() {
 							try {
-        						// Get the chosen size
-        						Dimension size;
-        						try {
-        	    					size = new Dimension(
-        	    						Integer.parseInt(sizeX.getText()),
-        	    						Integer.parseInt(sizeY.getText())
-        	    					);
-        	    				} catch (NumberFormatException ex) {
-        	    					size = fractal.getSize();
-        	    				}
-        					
-        						// Storage
-        						BufferedImage image = new BufferedImage(
-        							(int) size.getWidth(),
-        							(int) size.getHeight(),
-        							BufferedImage.TYPE_INT_RGB
-        						);
-        						
-        						// Paint the image
-        						Fractal temp = new Fractal(fractal.getState());
-        						temp.setSize(size);
-        						temp.regenerate();
-        						temp.paintComponent(image.createGraphics());
-        						
-        						// Need to ensure that the file we are saving has an extension.
-        						String file = exportChooser.getSelectedFile().getPath();
-        						if(!file.contains(".")) file += ".png";
-        						
-        						try {
-        			                ImageIO.write(
-        			                	image,
-        			                	file.substring(file.lastIndexOf(".") + 1),
-        			                	new File(file)
-        			                );
-        			                // Open the saved image or display a popup.
-        			                if(open) {
-        			                	Desktop.getDesktop().open(new File(file));
-        			                } else {
-        			                	JOptionPane.showMessageDialog(
-        			                		null,
-        			                		"Image saved to " + file,
-        			                		"Saved",
-        			                		JOptionPane.INFORMATION_MESSAGE
-        			                	);
-        			                }
-        			            } catch (IOException ioe) {
-        			            	JOptionPane.showMessageDialog(
-        			            		null,
-        			            		"Error writing image to " + file,
-        			            		"Error",
-        			            		JOptionPane.ERROR_MESSAGE
-        			            	);
-        			            }
-        					} catch (OutOfMemoryError e) {
-    			            	JOptionPane.showMessageDialog(
-    			            		null,
-    			            		"Try allocating more memory to java using '-Xmx????m' where ???? is the ammount of memory in MB.",
-    			            		"Out of memory",
-    			            		JOptionPane.ERROR_MESSAGE
-    			            	);
-        					}
+								// Get the chosen size
+								Dimension size;
+								try {
+									size = new Dimension(
+										Integer.parseInt(sizeX.getText()),
+										Integer.parseInt(sizeY.getText())
+									);
+								} catch (NumberFormatException ex) {
+									size = fractal.getSize();
+								}
+							
+								// Storage
+								BufferedImage image = new BufferedImage(
+									(int) size.getWidth(),
+									(int) size.getHeight(),
+									BufferedImage.TYPE_INT_RGB
+								);
+								
+								// Paint the image
+								Fractal temp = new Fractal(fractal.getState());
+								temp.setSize(size);
+								temp.regenerate();
+								temp.paintComponent(image.createGraphics());
+								
+								// Need to ensure that the file we are saving has an extension.
+								String file = exportChooser.getSelectedFile().getPath();
+								if(!file.contains(".")) file += ".png";
+								
+								try {
+									ImageIO.write(
+										image,
+										file.substring(file.lastIndexOf(".") + 1),
+										new File(file)
+									);
+									// Open the saved image or display a popup.
+									if(open) {
+										Desktop.getDesktop().open(new File(file));
+									} else {
+										JOptionPane.showMessageDialog(
+											null,
+											"Image saved to " + file,
+											"Saved",
+											JOptionPane.INFORMATION_MESSAGE
+										);
+									}
+								} catch (IOException ioe) {
+									JOptionPane.showMessageDialog(
+										null,
+										"Error writing image to " + file,
+										"Error",
+										JOptionPane.ERROR_MESSAGE
+									);
+								}
+							} catch (OutOfMemoryError e) {
+								JOptionPane.showMessageDialog(
+									null,
+									"Try allocating more memory to java using '-Xmx????m' where ???? is the ammount of memory in MB.",
+									"Out of memory",
+									JOptionPane.ERROR_MESSAGE
+								);
+							}
 						}
 					}).start();
 				}
@@ -269,9 +269,7 @@ public class FractalExplorer {
 	
 	public void centerFrames() {
 		// Position it all nicely. Need to take into account system insets
-		Insets    in  = Toolkit.getDefaultToolkit().getScreenInsets(
-			fractalFrame.getGraphicsConfiguration()
-		);
+		Insets in = Toolkit.getDefaultToolkit().getScreenInsets(fractalFrame.getGraphicsConfiguration());
 		Dimension all = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension use = new Dimension(
 			(int) (all.getWidth()  - in.left - in.right),
@@ -280,18 +278,15 @@ public class FractalExplorer {
 		
 		settingsFrame.pack();
 		settingsFrame.setLocation(in.left +  use.width  - settingsFrame.getWidth() - padding,
-                                  in.top  + (use.height - settingsFrame.getHeight()) / 2);
+		                          in.top  + (use.height - settingsFrame.getHeight()) / 2);
 		
 		// Only want to take the width of the settingsFrame into account if it's visible
 		if(settingsFrame.isVisible()) {
-			fractalFrame.setSize(     use.width - settingsFrame.getWidth() - padding * 3,
-            settingsFrame.getHeight());
-			fractalFrame.setLocation( in.left +  padding,
-								      in.top  + (use.height - fractalFrame.getHeight()) / 2);
+			fractalFrame.setSize(use.width - settingsFrame.getWidth() - padding * 3, settingsFrame.getHeight());
+			fractalFrame.setLocation(in.left + padding, in.top + (use.height - fractalFrame.getHeight()) / 2);
 		} else {
-    		fractalFrame.setSize(     use.width - padding * 2, settingsFrame.getHeight());
-    		fractalFrame.setLocation( in.left +  padding,
-    			                      in.top  + (use.height - fractalFrame.getHeight()) / 2);
+			fractalFrame.setSize(use.width - padding * 2, settingsFrame.getHeight());
+			fractalFrame.setLocation(in.left + padding, in.top  + (use.height - fractalFrame.getHeight()) / 2);
 		}
 	}
 	
@@ -299,16 +294,16 @@ public class FractalExplorer {
 		// Pick our backend
 		try {
 			Calculable.set(OpenCLCalculator.class);
-        } catch (Exception oh) {
-        	oh.printStackTrace();
-        	System.err.println("GPU unavaliable, falling back to a slower CPU implementation");
-        	try {
-        		Calculable.set(JavaCalculator.class);
-        	} catch (Exception ohno) {
-            	System.err.println("Oh dear, that didn't work. May be unable to recover from this");
-        		ohno.printStackTrace();
-        	}
-        }
+		} catch (Exception oh) {
+			oh.printStackTrace();
+			System.err.println("GPU unavaliable, falling back to a slower CPU implementation");
+			try {
+				Calculable.set(JavaCalculator.class);
+			} catch (Exception ohno) {
+				System.err.println("Oh dear, that didn't work. May be unable to recover from this");
+				ohno.printStackTrace();
+			}
+		}
 		
 		// Setup our fractals
 		fractal = new Fractal();
@@ -372,7 +367,7 @@ public class FractalExplorer {
 		// Close settings on close
 		fractalFrame.addWindowListener(new WindowAdapter() {
 			@Override public void windowClosing(WindowEvent e) {
-			    saveFavourites(file);
+				saveFavourites(file);
 				settingsFrame.dispose();
 			}
 		});
@@ -400,9 +395,9 @@ public class FractalExplorer {
 				} catch(IllegalArgumentException f) {
 					setIconImage(ImageIO.read(new File("fractal.png")));
 				}
-	        } catch (IOException e) {
-	        	System.err.println("Couldn't read icon, using Java default");
-	        }
+			} catch (IOException e) {
+				System.err.println("Couldn't read icon, using Java default");
+			}
 			
 			// Split pane lets us resize it nicely
 			final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -484,10 +479,10 @@ public class FractalExplorer {
 				
 				@Override
 				public void componentResized(ComponentEvent e) {
-				    if(firstResize) {
-				    	splitPane.setDividerLocation(getWidth() - 400);
-				    	firstResize = false;
-				    }
+					if(firstResize) {
+						splitPane.setDividerLocation(getWidth() - 400);
+						firstResize = false;
+					}
 				}
 			});
 			
@@ -525,7 +520,7 @@ public class FractalExplorer {
 					settingsFrame.setVisible(!settingsFrame.isVisible());
 					//centerFrames();
 			}});
-        }
+		}
 	}
 	
 	public class SettingsFrame extends JFrame {
@@ -545,9 +540,9 @@ public class FractalExplorer {
 				} catch(IllegalArgumentException f) {
 					setIconImage(ImageIO.read(new File("fractal.png")));
 				}
-	        } catch (IOException e) {
-	        	System.err.println("Couldn't read icon, using Java default");
-	        }
+			} catch (IOException e) {
+				System.err.println("Couldn't read icon, using Java default");
+			}
 			
 			// Create the panel
 			JPanel settingsPanel = new JPanel();
@@ -657,18 +652,18 @@ public class FractalExplorer {
 			gridSettings.add(liveJulia);
 
 			// Style our long menu
-	    	for(Component c : gridSettings.getComponents()) {
-	    		JComponent jc = (JComponent) c;
-	    		if(jc instanceof JCheckBox) {
-	    			jc.setOpaque(false);
-	    			((JCheckBox)  jc).setHorizontalAlignment(JCheckBox.RIGHT);
-	    		}
-	    		if(jc instanceof JTextField) {
-	    			((JTextField) jc).setHorizontalAlignment(JTextField.RIGHT);
-	    		} else {
-	    			jc.setBackground(Colors.foreground);
-	    		}
-	    	}
+			for(Component c : gridSettings.getComponents()) {
+				JComponent jc = (JComponent) c;
+				if(jc instanceof JCheckBox) {
+					jc.setOpaque(false);
+					((JCheckBox)  jc).setHorizontalAlignment(JCheckBox.RIGHT);
+				}
+				if(jc instanceof JTextField) {
+					((JTextField) jc).setHorizontalAlignment(JTextField.RIGHT);
+				} else {
+					jc.setBackground(Colors.foreground);
+				}
+			}
 
 			coloringPanel = new JPanel(new BorderLayout());
 			coloringPanel.setBorder(new EmptyBorder(padding, padding, padding, padding));
@@ -724,10 +719,10 @@ public class FractalExplorer {
 			javaRadio.addActionListener(new ActionListener() {
 				@Override public void actionPerformed(ActionEvent e) {
 					try {
-		                Calculable.set(JavaCalculator.class);
-	                } catch (Exception e1) {
-	                	System.err.println("Error setting Java Calculator");
-	                }
+						Calculable.set(JavaCalculator.class);
+					} catch (Exception e1) {
+						System.err.println("Error setting Java Calculator");
+					}
 					
 					// Update fractals list
 					fractalsCombo.removeAllItems();
@@ -743,21 +738,21 @@ public class FractalExplorer {
 				@Override public void actionPerformed(ActionEvent e) {
 					try {
 						Calculable.set(OpenCLCalculator.class);
-		            } catch (Exception oh) {
-		            	oh.printStackTrace();
-			        	System.err.println("GPU unavaliable, falling back to CPU implementation");
-		            	try {
-		            		Calculable.set(JavaCalculator.class);
-		            	} catch (Exception ohno) {
-		                	System.err.println("That didn't work. May be unable to recover");
-		            		ohno.printStackTrace();
-		            	}
-		            	
-		            	// Disable radios so this can't happen again
-	                	javaRadio.setSelected(true);
-	                	javaRadio.setEnabled(false);
-	                	openclRadio.setEnabled(false);
-		            }
+					} catch (Exception oh) {
+						oh.printStackTrace();
+						System.err.println("GPU unavaliable, falling back to CPU implementation");
+						try {
+							Calculable.set(JavaCalculator.class);
+						} catch (Exception ohno) {
+							System.err.println("That didn't work. May be unable to recover");
+							ohno.printStackTrace();
+						}
+						
+						// Disable radios so this can't happen again
+						javaRadio.setSelected(true);
+						javaRadio.setEnabled(false);
+						openclRadio.setEnabled(false);
+					}
 					
 					// Update fractals list
 					fractalsCombo.removeAllItems();
@@ -926,7 +921,7 @@ public class FractalExplorer {
 					liveJuliaUpdates = liveJulia.isSelected();
 				}
 			});
-        }
+		}
 	
 		/**
 		 * Update the color settings panel

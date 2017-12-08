@@ -25,7 +25,7 @@ public class Binary extends Colorable implements Serializable, UserConfigurable 
 	 */
 	public Binary() {
 		this(new Color(0, 0,  0), new Color(255, 255, 255));
-    }
+	}
 	
 	/**
 	 * Initialise Binary coloring with your chosen colors
@@ -33,9 +33,9 @@ public class Binary extends Colorable implements Serializable, UserConfigurable 
 	 * @param limit Limit color
 	 */
 	public Binary(Color base, Color limit) {
-	    this.base  = base;
-	    this.limit = limit;
-    }
+		this.base  = base;
+		this.limit = limit;
+	}
 	
 	@Override
 	public int[] iterationsToRGB(double[] data, int iterations) {
@@ -94,6 +94,6 @@ public class Binary extends Colorable implements Serializable, UserConfigurable 
 	
 	@Override
 	public Colorable clone() {
-	    return new Binary(base, limit);
+		return new Binary(base, limit);
 	}
 }

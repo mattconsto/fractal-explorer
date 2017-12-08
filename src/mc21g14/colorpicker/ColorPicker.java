@@ -26,7 +26,7 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-	    setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
+		setBorder(new MatteBorder(3, 3, 3, 3, Color.BLACK));
 	}
 	
 	/**
@@ -37,10 +37,10 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 	 */
 	public ColorPicker(float hue, float sat, float bri) {
 		this();
-	    this.hue = hue;
-	    this.sat = sat;
-	    this.bri = bri;
-    }
+		this.hue = hue;
+		this.sat = sat;
+		this.bri = bri;
+	}
 	
 	/**
 	 * Create a ColorPicker from a HSB array
@@ -74,23 +74,23 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 		int diameter = (int) (Math.min(getWidth(), getHeight()) * 0.9);
 
 		// Create a Circle Object for us to check within.
-		Ellipse2D circle    = new Ellipse2D.Double(
+		Ellipse2D circle = new Ellipse2D.Double(
 			(getWidth()  - diameter) / 2,
 			(getHeight() - diameter) / 2,
 			diameter, diameter);
 		
 		// If we click inside the circle we change hue + sat, outside we change bri.
 		if(circle.contains(p)) {
-	    	hue = limit((float) (
-	    		Math.atan2(
-    	    		p.getX() - getWidth()  / 2.0,
-    	    		p.getY() - getHeight() / 2.0
-	    		) / Math.PI / 2.0 + 0.5
-	    	), 0, 1);
+			hue = limit((float) (
+				Math.atan2(
+					p.getX() - getWidth()  / 2.0,
+					p.getY() - getHeight() / 2.0
+				) / Math.PI / 2.0 + 0.5
+			), 0, 1);
 			sat = limit((float) (
 				Math.sqrt(
-    				Math.pow((p.getX() - getWidth()  / 2.0) / diameter * 2, 2) + 
-    				Math.pow((p.getY() - getHeight() / 2.0) / diameter * 2, 2)
+					Math.pow((p.getX() - getWidth()  / 2.0) / diameter * 2, 2) + 
+					Math.pow((p.getY() - getHeight() / 2.0) / diameter * 2, 2)
 				)
 			), 0, 1);
 		} else {
@@ -122,14 +122,14 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 		int diameter = (int) (Math.min(getWidth(), getHeight()) * 0.9);
 		
 		// Create our shapes
-		Ellipse2D circle    = new Ellipse2D.Double(
-				(getWidth()  - diameter) / 2,
-				(getHeight() - diameter) / 2,
-				diameter, diameter);
+		Ellipse2D circle	= new Ellipse2D.Double(
+			(getWidth()  - diameter) / 2,
+			(getHeight() - diameter) / 2,
+			diameter, diameter);
 		Ellipse2D selection = new Ellipse2D.Double(
-    			(getWidth()  - width)/2.0 + sat*diameter/2.0*Math.cos((1.0 - hue - 0.25)*Math.PI*2),
-    			(getHeight() - width)/2.0 + sat*diameter/2.0*Math.sin((1.0 - hue - 0.25)*Math.PI*2),
-				width, width);
+			(getWidth()  - width)/2.0 + sat*diameter/2.0*Math.cos((1.0 - hue - 0.25)*Math.PI*2),
+			(getHeight() - width)/2.0 + sat*diameter/2.0*Math.sin((1.0 - hue - 0.25)*Math.PI*2),
+			width, width);
 		
 		// Graphics2D > Graphics
 		Graphics2D g2d = (Graphics2D) g;
@@ -137,14 +137,14 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 		g2d.setStroke(new BasicStroke(3f));
 
 		// Fill background
-		g2d.setPaint(new GradientPaint(new Point(0, 0),           Color.getHSBColor(hue, sat, 1),
-				                       new Point(0, getHeight()), Color.getHSBColor(hue, sat, 0)));
+		g2d.setPaint(new GradientPaint(new Point(0, 0),		   Color.getHSBColor(hue, sat, 1),
+									   new Point(0, getHeight()), Color.getHSBColor(hue, sat, 0)));
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 		
 		// Draw bri indicator
 		g2d.setColor(getForeground());
-		g2d.drawLine(0,          (int) ((1.0 - bri) * getHeight()),
-				     getWidth(), (int) ((1.0 - bri) * getHeight()));
+		g2d.drawLine(0,		  (int) ((1.0 - bri) * getHeight()),
+					 getWidth(), (int) ((1.0 - bri) * getHeight()));
 		
 		// Fill circle
 		g2d.setPaint(new ColorWheelPaint(bri, (getWidth()-diameter)/2, (getHeight()-diameter)/2));
@@ -182,36 +182,36 @@ public class ColorPicker extends JComponent implements MouseListener, MouseMotio
 	 * Add an ActionListener to the ColorPickers internal list
 	 * @param listener The Listener
 	 */
-    public synchronized void addActionListener(ActionListener listener) {
-        listenerList.add(ActionListener.class, listener);
-    }
-    
-    /**
-     * Remove an ActionListener from the ColorPickers internal list
-     * @param listener The Listener
-     */
-    public synchronized void removeActionListener(ActionListener listener) {
-        listenerList.remove(ActionListener.class, listener);
-    }
+	public synchronized void addActionListener(ActionListener listener) {
+		listenerList.add(ActionListener.class, listener);
+	}
 	
-    /**
-     * Fired whenever the color changes
-     */
-    protected void fireActionPerformed() {
-        Object[]    list  = listenerList.getListenerList();
-        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, toString());
+	/**
+	 * Remove an ActionListener from the ColorPickers internal list
+	 * @param listener The Listener
+	 */
+	public synchronized void removeActionListener(ActionListener listener) {
+		listenerList.remove(ActionListener.class, listener);
+	}
+	
+	/**
+	 * Fired whenever the color changes
+	 */
+	protected void fireActionPerformed() {
+		Object[]	list  = listenerList.getListenerList();
+		ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, toString());
 		
-        // Loop through the Listener list, firing actions when we can
-        for(int i = list.length - 2; i >= 0; i -= 2) {
-            if(list[i] == ActionListener.class)
-                ((ActionListener) list[i + 1]).actionPerformed(event);
-        }
-    }
+		// Loop through the Listener list, firing actions when we can
+		for(int i = list.length - 2; i >= 0; i -= 2) {
+			if(list[i] == ActionListener.class)
+				((ActionListener) list[i + 1]).actionPerformed(event);
+		}
+	}
 
-    /**
-     * Create a JFrame containing one ColorPickerPanel. Useful for development
-     * @param args Command line arguments
-     */
+	/**
+	 * Create a JFrame containing one ColorPickerPanel. Useful for development
+	 * @param args Command line arguments
+	 */
 	public static void main(String[] args) {
 		// Create a picker
 		final ColorPicker picker = new ColorPicker(0.5f, 0.5f, 0.5f);

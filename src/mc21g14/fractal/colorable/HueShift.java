@@ -23,7 +23,7 @@ public class HueShift extends Colorable implements Serializable, UserConfigurabl
 	 */
 	public HueShift() {
 		this(0);
-    }
+	}
 	
 	/**
 	 * Initialise Classic coloring with a specified hue offset
@@ -34,25 +34,25 @@ public class HueShift extends Colorable implements Serializable, UserConfigurabl
 	}
 	
 	@Override
-    public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, int iterations) {
 		int[] results = new int[3 * data.length];
 		
-    	for(int i = 0; i < data.length; i++) {
-    		if(data[i] >= 0) {
-        		// Using HSB color as it allows us to easily change hue, unlike RGB
-    			int rgb = Color.HSBtoRGB((float) (hue + data[i] / iterations), 1f, 1f);
-    			// Bitshift the RGB values as we need to produce an RGB array
-        		results[3 * i + 0] = (rgb >> 16) & 0xFF;
-        		results[3 * i + 1] = (rgb >>  8) & 0xFF;
-        		results[3 * i + 2] = (rgb >>  0) & 0xFF;
-    		} else {
-    			// Fallback
-        		results[3 * i + 0] = results[3 * i + 1] = results[3 * i + 2] = 0;
-    		}
-    	}
-    	
-    	return results;
-    }
+		for(int i = 0; i < data.length; i++) {
+			if(data[i] >= 0) {
+				// Using HSB color as it allows us to easily change hue, unlike RGB
+				int rgb = Color.HSBtoRGB((float) (hue + data[i] / iterations), 1f, 1f);
+				// Bitshift the RGB values as we need to produce an RGB array
+				results[3 * i + 0] = (rgb >> 16) & 0xFF;
+				results[3 * i + 1] = (rgb >>  8) & 0xFF;
+				results[3 * i + 2] = (rgb >>  0) & 0xFF;
+			} else {
+				// Fallback
+				results[3 * i + 0] = results[3 * i + 1] = results[3 * i + 2] = 0;
+			}
+		}
+		
+		return results;
+	}
 
 	@Override
 	public JPanel getSettingsPanel() {
@@ -77,6 +77,6 @@ public class HueShift extends Colorable implements Serializable, UserConfigurabl
 	
 	@Override
 	public Colorable clone() {
-	    return new HueShift(hue);
+		return new HueShift(hue);
 	}
 }

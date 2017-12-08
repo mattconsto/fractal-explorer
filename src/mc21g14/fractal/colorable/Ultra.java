@@ -52,25 +52,25 @@ public class Ultra extends Colorable implements UserConfigurable {
 	public int[] iterationsToRGB(double[] data, int iterations) {
 		int[] results = new int[3 * data.length];
 		
-    	for(int i = 0; i < data.length; i++) {
-    		
-    		if(data[i] >= 0 && colors.get((int) data[i] % colors.size()) != null) {
-        		// If pixel reached
-    			double mod    = (data[i] % stretch) / stretch;
-    			Color  colorA = colors.get((int) (data[i] / stretch    ) % colors.size());
-    			Color  colorB = colors.get((int) (data[i] / stretch + 1) % colors.size());
-    			
-    			// Interpolate between the two colors
-        		results[3 * i + 0] = (int) ((1 - mod) * colorA.getRed()   + mod * colorB.getRed());
-        		results[3 * i + 1] = (int) ((1 - mod) * colorA.getGreen() + mod * colorB.getGreen());
-        		results[3 * i + 2] = (int) ((1 - mod) * colorA.getBlue()  + mod * colorB.getBlue());
-    		} else {
-    			// Fallback
-        		results[3 * i + 0] = results[3 * i + 1] = results[3 * i + 2] = 0;
-    		}
-    	}
-    	
-    	return results;
+		for(int i = 0; i < data.length; i++) {
+			
+			if(data[i] >= 0 && colors.get((int) data[i] % colors.size()) != null) {
+				// If pixel reached
+				double mod    = (data[i] % stretch) / stretch;
+				Color  colorA = colors.get((int) (data[i] / stretch    ) % colors.size());
+				Color  colorB = colors.get((int) (data[i] / stretch + 1) % colors.size());
+				
+				// Interpolate between the two colors
+				results[3 * i + 0] = (int) ((1 - mod) * colorA.getRed()   + mod * colorB.getRed());
+				results[3 * i + 1] = (int) ((1 - mod) * colorA.getGreen() + mod * colorB.getGreen());
+				results[3 * i + 2] = (int) ((1 - mod) * colorA.getBlue()  + mod * colorB.getBlue());
+			} else {
+				// Fallback
+				results[3 * i + 0] = results[3 * i + 1] = results[3 * i + 2] = 0;
+			}
+		}
+		
+		return results;
 	}
 
 	@Override

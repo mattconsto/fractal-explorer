@@ -11,7 +11,7 @@ import mc21g14.fractal.misc.FractalState;
  */
 public abstract class Calculable {
 	protected static Calculable instance;
-	protected static boolean    running = false;
+	protected static boolean	running = false;
 	
 	/**
 	 * Calculate the fractal asynchronously for a given state and size
@@ -74,16 +74,16 @@ public abstract class Calculable {
 		if(instance == null) {
 			try {
 				Calculable.set(OpenCLCalculator.class);
-            } catch (Exception e) {
-	        	System.err.println("GPU unavaliable, falling back to a slower CPU implementation");
-            	try {
-            		Calculable.set(JavaCalculator.class);
-            	} catch (Exception ohno) {
-            		e.printStackTrace();
-            	}
-            }
+			} catch (Exception e) {
+				System.err.println("GPU unavaliable, falling back to a slower CPU implementation");
+				try {
+					Calculable.set(JavaCalculator.class);
+				} catch (Exception ohno) {
+					e.printStackTrace();
+				}
+			}
 		}
-			
+		
 		return instance;
 	}
 	
@@ -107,6 +107,6 @@ public abstract class Calculable {
 			System.getProperty("os.name").toLowerCase().contains("mac")
 		)) throw new Exception("OS not supported");
 		
-        instance = implementation.getConstructor().newInstance();
+		instance = implementation.getConstructor().newInstance();
 	}
 }

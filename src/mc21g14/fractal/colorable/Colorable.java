@@ -35,43 +35,43 @@ public abstract class Colorable implements Cloneable, Serializable {
 	 * Add an ActionListener to the Fractals internal list
 	 * @param listener The Listener
 	 */
-    public synchronized void addActionListener(ActionListener listener) {
-        listenerList.add(ActionListener.class, listener);
-    }
-    
-    /**
-     * Remove an ActionListener from the Fractals internal list
-     * @param listener The Listener
-     */
-    public synchronized void removeActionListener(ActionListener listener) {
-        listenerList.remove(ActionListener.class, listener);
-    }
-    
-    /**
-     * Remove all listeners
-     */
-    public synchronized void removeAllListeners() {
-    	listenerList = new EventListenerList();
-    }
+	public synchronized void addActionListener(ActionListener listener) {
+		listenerList.add(ActionListener.class, listener);
+	}
 	
-    /**
-     * Fired whenever the fractal changes
-     */
-    protected void fireActionPerformed() {
-        Object[]    list  = listenerList.getListenerList();
-        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Color Change");
-        
-        // Loop through the Listener list, firing actions when we can
-        for(int i = list.length - 2; i >= 0; i -= 2) {
-            if(list[i] == ActionListener.class)
-                ((ActionListener) list[i + 1]).actionPerformed(event);
-        }
-    }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName();
-    }
-    
-    @Override public abstract Colorable clone();
+	/**
+	 * Remove an ActionListener from the Fractals internal list
+	 * @param listener The Listener
+	 */
+	public synchronized void removeActionListener(ActionListener listener) {
+		listenerList.remove(ActionListener.class, listener);
+	}
+	
+	/**
+	 * Remove all listeners
+	 */
+	public synchronized void removeAllListeners() {
+		listenerList = new EventListenerList();
+	}
+	
+	/**
+	 * Fired whenever the fractal changes
+	 */
+	protected void fireActionPerformed() {
+		Object[]    list  = listenerList.getListenerList();
+		ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Color Change");
+		
+		// Loop through the Listener list, firing actions when we can
+		for(int i = list.length - 2; i >= 0; i -= 2) {
+			if(list[i] == ActionListener.class)
+				((ActionListener) list[i + 1]).actionPerformed(event);
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+	
+	@Override public abstract Colorable clone();
 }

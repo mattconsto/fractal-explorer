@@ -26,7 +26,7 @@ public class Gradient extends Colorable implements Serializable, UserConfigurabl
 	 */
 	public Gradient() {
 		this(new Color(250, 10,  10), new Color(255, 255, 255));
-    }
+	}
 	
 	/**
 	 * Create a new gradient between two colors
@@ -34,12 +34,12 @@ public class Gradient extends Colorable implements Serializable, UserConfigurabl
 	 * @param limit The limit color
 	 */
 	public Gradient(Color base, Color limit) {
-	    this.base  = base;
-	    this.limit = limit;
-    }
+		this.base  = base;
+		this.limit = limit;
+	}
 
 	@Override
-    public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, int iterations) {
 		// We need valid colors
 		if(base  == null) throw new InvalidParameterException("Base  cannot be null!");
 		if(limit == null) throw new InvalidParameterException("Limit cannot be null!");
@@ -53,25 +53,25 @@ public class Gradient extends Colorable implements Serializable, UserConfigurabl
 			limit.getBlue()  - base.getBlue()
 		};
 		
-    	for(int i = 0; i < data.length; i++) {
-    		if(data[i] >= 0) {
-        		// If pixel reached
-    			double value = Math.min(data[i] / iterations, 1);
-    			
-    			// Interpolate between the two colors
-        		results[3 * i + 0] = (int) (base.getRed()   + value * deltas[0]);
-        		results[3 * i + 1] = (int) (base.getGreen() + value * deltas[1]);
-        		results[3 * i + 2] = (int) (base.getBlue()  + value * deltas[2]);
-    		} else {
-    			// Fallback
-        		results[3 * i + 0] = limit.getRed();
-        		results[3 * i + 1] = limit.getGreen();
-        		results[3 * i + 2] = limit.getRed();
-    		}
-    	}
-    	
-    	return results;
-    }
+		for(int i = 0; i < data.length; i++) {
+			if(data[i] >= 0) {
+				// If pixel reached
+				double value = Math.min(data[i] / iterations, 1);
+				
+				// Interpolate between the two colors
+				results[3 * i + 0] = (int) (base.getRed()   + value * deltas[0]);
+				results[3 * i + 1] = (int) (base.getGreen() + value * deltas[1]);
+				results[3 * i + 2] = (int) (base.getBlue()  + value * deltas[2]);
+			} else {
+				// Fallback
+				results[3 * i + 0] = limit.getRed();
+				results[3 * i + 1] = limit.getGreen();
+				results[3 * i + 2] = limit.getRed();
+			}
+		}
+		
+		return results;
+	}
 
 	@Override
 	public JPanel getSettingsPanel() {
@@ -112,6 +112,6 @@ public class Gradient extends Colorable implements Serializable, UserConfigurabl
 	
 	@Override
 	public Colorable clone() {
-	    return new Gradient(base, limit);
+		return new Gradient(base, limit);
 	}
 }

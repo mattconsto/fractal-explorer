@@ -38,17 +38,17 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 */
 	public Fractal() {
 		// Add listeners
-	    addMouseListener(this);
-	    addMouseMotionListener(this);
-	    addMouseWheelListener(this);
-	    addKeyListener(this);
-	    
-	    // Nice cursor
-	    setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-	    
-	    // Pick our coloring
-	    state.coloring.addActionListener(new ActionListener() {
-	    	@Override public void actionPerformed(ActionEvent e) {repaint();}});
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		addMouseWheelListener(this);
+		addKeyListener(this);
+
+		// Nice cursor
+		setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+
+		// Pick our coloring
+		state.coloring.addActionListener(new ActionListener() {
+			@Override public void actionPerformed(ActionEvent e) {repaint();}});
 	}
 	
 	/**
@@ -81,15 +81,15 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	public double       getThreshold    () {return state.threshold;}
 
 	// Public Setters
-	public void setBottom        (double  b) {state.bottom        = b; regenerate();}
-	public void setBuddha        (boolean b) {state.buddha        = b; regenerate();}
+	public void setBottom (double  b) {state.bottom = b; regenerate();}
+	public void setBuddha (boolean b) {state.buddha = b; regenerate();}
 	
 	public void setColoring(Colorable c) {
 		state.coloring = c;
 		// A new listener is required.
-	    c.addActionListener(new ActionListener() {
-	    	@Override public void actionPerformed(ActionEvent e) {repaint();}
-	    });
+		c.addActionListener(new ActionListener() {
+			@Override public void actionPerformed(ActionEvent e) {repaint();}
+		});
 		repaint();
 	}
 	
@@ -108,10 +108,10 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 
 	public void setState(FractalState s) {
 		// We need to clone the state so it isn't shared. If you want it shared, set it.
-	    this.state = s.clone();
-	    setColoring(s.coloring);
-	    regenerate();
-    }
+		this.state = s.clone();
+		setColoring(s.coloring);
+		regenerate();
+	}
 	
 	public void setTop           (double  t) {state.top           = t; regenerate();}
 	public void setThreshold     (double  t) {state.threshold     = t; regenerate();}
@@ -122,34 +122,34 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 * @param f The fractal
 	 * @return The Complex
 	 */
-    public static Complex getComplexFromPoint(Point p, Fractal f) {
-	    return new Complex(
-	    	f.state.start + (f.state.end - f.state.start)  * p.getX() / f.getWidth(),
-	    	f.state.top   - (f.state.top - f.state.bottom) * p.getY() / f.getHeight()
-	    );
-    }
-    
-    /**
-     * Get a Point from a complex
-     * @param c The complex
-     * @param f The fractal
-     * @return The point
-     */
-    public static Point getPointFromComplex(Complex c, Fractal f) {
-	    return new Point(
-	    	(int) (f.getWidth()  * (c.r - f.state.start) / (f.state.end    - f.state.start)),
-	    	(int) (f.getHeight() * (c.i - f.state.top)   / (f.state.bottom - f.state.top))
-	    );
-    }
+	public static Complex getComplexFromPoint(Point p, Fractal f) {
+		return new Complex(
+			f.state.start + (f.state.end - f.state.start)  * p.getX() / f.getWidth(),
+			f.state.top   - (f.state.top - f.state.bottom) * p.getY() / f.getHeight()
+		);
+	}
+
+	/**
+	 * Get a Point from a complex
+	 * @param c The complex
+	 * @param f The fractal
+	 * @return The point
+	 */
+	public static Point getPointFromComplex(Complex c, Fractal f) {
+		return new Point(
+			(int) (f.getWidth()  * (c.r - f.state.start) / (f.state.end    - f.state.start)),
+			(int) (f.getHeight() * (c.i - f.state.top)   / (f.state.bottom - f.state.top))
+		);
+	}
 	
-    /**
-     * Regenerate the fractal.
-     */
+	/**
+	 * Regenerate the fractal.
+	 */
 	public void regenerate() {
 		// If we have a size > 0
 		if(getWidth() > 0 && getHeight() > 0) {
 			// Render in a new thread
-    		Calculable.calcAsync(state, getSize(), new Callback() {
+			Calculable.calcAsync(state, getSize(), new Callback() {
 				@Override public void callback(double[] data, Dimension size) {
 					fractalSize = size;
 					fractalData = data;
@@ -157,14 +157,14 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 					zoomReady     = true;
 					movementReady = true;
 					
-		    		repaint();
+					repaint();
 				}
 			});
-    		
-    		// Update our listeners
-    		fireActionPerformed();
-    	    
-    		lastSize = getSize();
+			
+			// Update our listeners
+			fireActionPerformed();
+			
+			lastSize = getSize();
 		}
 	}
 	
@@ -176,20 +176,20 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 		double width  = state.end - state.start;
 		double height = state.top - state.bottom;
 		
-    	Point a = getPointFromComplex(new Complex(
-    		state.start  - 0.1 * width  * amount,
-    		state.top    + 0.1 * height * amount
-    	), this);
-    	Point b = getPointFromComplex(new Complex(
-    		state.end    + 0.1 * width  * amount,
-    		state.bottom - 0.1 * height * amount
-    	), this);
+		Point a = getPointFromComplex(new Complex(
+			state.start  - 0.1 * width  * amount,
+			state.top    + 0.1 * height * amount
+		), this);
+		Point b = getPointFromComplex(new Complex(
+			state.end    + 0.1 * width  * amount,
+			state.bottom - 0.1 * height * amount
+		), this);
 		
 		state.start  -= 0.1 * width  * amount;
 		state.end    += 0.1 * width  * amount;
 		state.top    += 0.1 * height * amount;
 		state.bottom -= 0.1 * height * amount;
-    	
+		
 		// Fake zoom in, to make it look more responsive.
 		if(zoomReady && fractalData != null) {
 			zoomReady = false;
@@ -293,8 +293,8 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 		// Ensure we have a fractal
 		while(fractalData == null) {
 			try {
-	            Thread.sleep(10);
-            } catch (InterruptedException ignored) {}
+				Thread.sleep(10);
+			} catch (InterruptedException ignored) {}
 		}
 		
 		// draw it
@@ -323,7 +323,7 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			Point a = getPointFromComplex(initial, this);
 			Point b = getPointFromComplex(current, this);
 			Rectangle rectangle = new Rectangle(Math.min(a.x,  b.x), Math.min(a.y,  b.y),
-				                                Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+				                                  Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 			g2d.setColor(getForeground());
 			g2d.fill(new BasicStroke(2).createStrokedShape(rectangle));
 			g2d.setColor(getBackground());
@@ -363,7 +363,7 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	@Override
 	public Dimension getPreferredSize() {
 		// Not strictly necessary, but nice to have a default size
-	    return new Dimension(100, 100);
+		return new Dimension(100, 100);
 	}
 
 	@Override
@@ -377,34 +377,34 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 		if(initial == null) current = initial = getComplexFromPoint(e.getPoint(), this);
 		
 		// Maths to ensure that the current point always makes a rectangle with the ratio.
-    	double ratio = 1.0 * Math.max(
-    		getWidth(), getHeight()) / Math.min(getWidth(),
-    		getHeight()
-    	);
-    	Point  point = getPointFromComplex(initial, this);
-    	
-    	// Need to handle both orientations
-    	if(getWidth() > getHeight()) {
-	    	int max = Math.max(
-		           (int) (Math.abs(e.getX() - point.x) / ratio),
-		           (int) (Math.abs(e.getY() - point.y))
-		       );
-	    	current = getComplexFromPoint(new Point(
-	    			       (int) (point.x + (e.getX() > point.x ? 1 : -1) * max * ratio),
-	    		           (int) (point.y + (e.getY() > point.y ? 1 : -1) * max)
-	    		       ), this);
-    	} else {
-	    	int max = Math.max(
-		           (int) (Math.abs(e.getX() - point.x)),
-		           (int) (Math.abs(e.getY() - point.y) / ratio)
-		       );
-	    	current = getComplexFromPoint(new Point(
-		       (int) (point.x + (e.getX() > point.x ? 1 : -1) * max),
-	           (int) (point.y + (e.getY() > point.y ? 1 : -1) * max * ratio)
-	       ), this);
-    	}
-	    
-	    repaint();
+		double ratio = 1.0 * Math.max(
+			getWidth(), getHeight()) / Math.min(getWidth(),
+			getHeight()
+		);
+		Point  point = getPointFromComplex(initial, this);
+
+		// Need to handle both orientations
+		if(getWidth() > getHeight()) {
+			int max = Math.max(
+				(int) (Math.abs(e.getX() - point.x) / ratio),
+				(int) (Math.abs(e.getY() - point.y))
+			);
+			current = getComplexFromPoint(new Point(
+				(int) (point.x + (e.getX() > point.x ? 1 : -1) * max * ratio),
+				(int) (point.y + (e.getY() > point.y ? 1 : -1) * max)
+			), this);
+		} else {
+			int max = Math.max(
+				(int) (Math.abs(e.getX() - point.x)),
+				(int) (Math.abs(e.getY() - point.y) / ratio)
+			);
+			current = getComplexFromPoint(new Point(
+				(int) (point.x + (e.getX() > point.x ? 1 : -1) * max),
+				(int) (point.y + (e.getY() > point.y ? 1 : -1) * max * ratio)
+			), this);
+		}
+
+		repaint();
 	}
 	
 	@Override
@@ -414,52 +414,52 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	@Override
-    public void mouseReleased(MouseEvent e) {
-	    if(initial != null && current != null) {
-	    	Point a = getPointFromComplex(initial, this);
-	    	Point b = getPointFromComplex(current, this);
-	    	if(Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)) > 10) {
-        	    state.start  = Math.min(initial.r, current.r);
-        	    state.end    = Math.max(initial.r, current.r);
-        	    state.top    = Math.min(initial.i, current.i);
-        	    state.bottom = Math.max(initial.i, current.i);
+	public void mouseReleased(MouseEvent e) {
+		if(initial != null && current != null) {
+			Point a = getPointFromComplex(initial, this);
+			Point b = getPointFromComplex(current, this);
+			if(Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)) > 10) {
+				state.start  = Math.min(initial.r, current.r);
+				state.end    = Math.max(initial.r, current.r);
+				state.top    = Math.min(initial.i, current.i);
+				state.bottom = Math.max(initial.i, current.i);
 				
-	    		// Fake zoom in, to make it look more responsive.
+				// Fake zoom in, to make it look more responsive.
 				if(fractalData != null) {
-	    			fractalData = sectionOf(
-	    				fractalData,
-	    				fractalSize.width,
-	    				new Rectangle(
-	    					Math.min(a.x,  b.x), Math.min(a.y,  b.y), 
-	    					Math.abs(b.x - a.x), Math.abs(b.y - a.y))
-	    			);
-	    			fractalSize = new Dimension(Math.abs(b.x - a.x), Math.abs(b.y - a.y));
-	    			
-	    			regenerate();
+					fractalData = sectionOf(
+						fractalData,
+						fractalSize.width,
+						new Rectangle(
+							Math.min(a.x,  b.x), Math.min(a.y,  b.y), 
+							Math.abs(b.x - a.x), Math.abs(b.y - a.y))
+					);
+					fractalSize = new Dimension(Math.abs(b.x - a.x), Math.abs(b.y - a.y));
+					
+					regenerate();
 				}
-	    	} else {
-	    		selected = getComplexFromPoint(e.getPoint(), this);
-	    		fireActionPerformed();
-	    	}
-	    } else {
-    		selected = getComplexFromPoint(e.getPoint(), this);
-    		fireActionPerformed();
-    	}
-	    
-	    // We no longer want to draw the rectangle
-	    initial = null;
-	    current = null;
-	    
-	    repaint();
-    }
+			} else {
+				selected = getComplexFromPoint(e.getPoint(), this);
+				fireActionPerformed();
+			}
+		} else {
+			selected = getComplexFromPoint(e.getPoint(), this);
+			fireActionPerformed();
+		}
+		
+		// We no longer want to draw the rectangle
+		initial = null;
+		current = null;
+		
+		repaint();
+	}
 	
 	@Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseWheelEvent e) {
 		zoom(e.getWheelRotation()); // Generally equals 1/-1
-    }
+	}
 	
 	@Override
-    public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {
 		// We want to only handle the first keyPress event, as the Fractal takes time to re-render.
 		// This is generally more responsive than using keyClicked(KeyEvent e)
 		if(!keypressReady) return;
@@ -481,7 +481,7 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			case 45: zoom(1);  break; // Out
 			case 61: zoom(-1); break; // In
 		}
-    }
+	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -493,38 +493,37 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 * Add an ActionListener to the Fractals internal list
 	 * @param listener The Listener
 	 */
-    public synchronized void addActionListener(ActionListener listener) {
-        listenerList.add(ActionListener.class, listener);
-    }
-    
-    /**
-     * Remove an ActionListener from the Fractals internal list
-     * @param listener The Listener
-     */
-    public synchronized void removeActionListener(ActionListener listener) {
-        listenerList.remove(ActionListener.class, listener);
-    }
-    
-    /**
-     * Remove all listeners
-     */
-    public synchronized void removeAllListeners() {
-    	listenerList = new EventListenerList();
-    }
-	
-    /**
-     * Fired whenever the fractal changes
-     */
-    protected void fireActionPerformed() {
-        Object[]    list  = listenerList.getListenerList();
-        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Fractal Change");
+	public synchronized void addActionListener(ActionListener listener) {
+		listenerList.add(ActionListener.class, listener);
+	}
 
-        // Loop through the Listener list, firing actions when we can
-        for(int i = list.length - 2; i >= 0; i -= 2) {
-            if(list[i] == ActionListener.class)
-                ((ActionListener) list[i + 1]).actionPerformed(event);
-        }
-    }
+	/**
+	 * Remove an ActionListener from the Fractals internal list
+	 * @param listener The Listener
+	 */
+	public synchronized void removeActionListener(ActionListener listener) {
+		listenerList.remove(ActionListener.class, listener);
+	}
+
+	/**
+	 * Remove all listeners
+	 */
+	public synchronized void removeAllListeners() {
+		listenerList = new EventListenerList();
+	}
+	
+	/**
+	 * Fired whenever the fractal changes
+	 */
+	protected void fireActionPerformed() {
+		Object[]    list  = listenerList.getListenerList();
+		ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Fractal Change");
+
+		// Loop through the Listener list, firing actions when we can
+		for(int i = list.length - 2; i >= 0; i -= 2) {
+			if(list[i] == ActionListener.class) ((ActionListener) list[i + 1]).actionPerformed(event);
+		}
+	}
 
 	// Stubs
 	@Override public void keyTyped    (KeyEvent e)   {}
@@ -534,10 +533,10 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	@Override public void mousePressed(MouseEvent e) {}
 	
 	public static void main(String[] args) {
-	    JFrame frame = new JFrame("Fractal");
-	    frame.add(new Fractal());
-	    frame.setSize(800, 600);
-	    frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
-    }
+		JFrame frame = new JFrame("Fractal");
+		frame.add(new Fractal());
+		frame.setSize(800, 600);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
 }

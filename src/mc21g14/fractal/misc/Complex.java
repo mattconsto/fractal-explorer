@@ -17,25 +17,25 @@ public class Complex implements Cloneable, Serializable {
 	 * @param i The imaginary part of the complex number
 	 */
 	public Complex(double r, double i) {
-	    this.r = r;
-	    this.i = i;
-    }
+		this.r = r;
+		this.i = i;
+	}
 	
 	/**
 	 * Get the real component
 	 * @return The real component
 	 */
 	public double getR() {
-	    return r;
-    }
+		return r;
+	}
 	
 	/**
 	 * Get the imaginary component
 	 * @return The imaginary component
 	 */
 	public double getI() {
-	    return i;
-    }
+		return i;
+	}
 
 	/**
 	 * Square this complex number
@@ -153,9 +153,9 @@ public class Complex implements Cloneable, Serializable {
 		if(!string.matches("^[\\+-]?[0-9]+.[0-9]*[\\+-][0-9]+.[0-9]*$")) return null;
 		
 		// Split and create!
-		int    index = Math.max(string.lastIndexOf("+"), string.lastIndexOf("-"));
-		String r     = string.substring(0, index);
-		String i     = string.substring(index);
+		int index = Math.max(string.lastIndexOf("+"), string.lastIndexOf("-"));
+		String r  = string.substring(0, index);
+		String i  = string.substring(index);
 		
 		return new Complex(Double.parseDouble(r), Double.parseDouble(i.substring(0, i.length() - 1)));
 	}
@@ -176,7 +176,7 @@ public class Complex implements Cloneable, Serializable {
 	 * @return True if under the threshold
 	 */
 	public boolean equals(Complex other, double threshold) {
-	    return Math.abs(this.r - other.r) < threshold && Math.abs(this.i - other.i) < threshold;
+		return Math.abs(this.r - other.r) < threshold && Math.abs(this.i - other.i) < threshold;
 	}
 	
 	/**
@@ -184,6 +184,6 @@ public class Complex implements Cloneable, Serializable {
 	 */
 	@Override
 	protected Complex clone() {
-	    return new Complex(r, i);
+		return new Complex(r, i);
 	}
 }

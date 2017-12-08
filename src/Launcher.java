@@ -26,8 +26,8 @@ public class Launcher {
 		
 		// Print out memory usage.
 		Runtime rt = Runtime.getRuntime();
-	    System.out.println("Memory: " + rt.totalMemory() / 1_000_000 + "MB / " + rt.maxMemory() / 1_000_000  + "MB");
-	    
+		System.out.println("Memory: " + rt.totalMemory() / 1_000_000 + "MB / " + rt.maxMemory() / 1_000_000  + "MB");
+		
 		// Lets go!
 		new FractalExplorer();
 	}
