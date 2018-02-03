@@ -2,6 +2,7 @@ package mc21g14.fractal.calculable;
 
 import java.awt.Dimension;
 
+import mc21g14.fractal.misc.FractalLocation;
 import mc21g14.fractal.misc.FractalState;
 
 /**
@@ -11,7 +12,7 @@ import mc21g14.fractal.misc.FractalState;
  */
 public abstract class Calculable {
 	protected static Calculable instance;
-	protected static boolean	running = false;
+	protected static boolean    running = false;
 	
 	/**
 	 * Calculate the fractal asynchronously for a given state and size
@@ -19,13 +20,13 @@ public abstract class Calculable {
 	 * @param size The size of the fractal we want to render
 	 * @param call The function called when the fractal has been calculated
 	 */
-	public static void calcAsync(final FractalState state, final Dimension size, final Callback call) {
+	public static void calcAsync(final FractalState state, final FractalLocation location, final Dimension size, final Callback call) {
 		if(!running) {
 			running = true;
 			final long time = System.nanoTime();
 			new Thread() {
 				public void run() {
-					call.callback(getInstance().calculate(state, size), size);
+					call.callback(getInstance().calculate(state, location, size), size);
 					System.out.println("Took " + (System.nanoTime() - time) / 1_000_000_000.0);
 				};
 			}.start();
@@ -39,11 +40,11 @@ public abstract class Calculable {
 	 * @param size The size of the fractal we want to render
 	 * @param call The function called when the fractal has been calculated
 	 */
-	public static void calcBlocking(final FractalState state, final Dimension size, final Callback call) {
+	public static void calcBlocking(final FractalState state, final FractalLocation location, final Dimension size, final Callback call) {
 		if(!running) {
 			running = true;
 			final long time = System.nanoTime();
-			call.callback(getInstance().calculate(state, size), size);
+			call.callback(getInstance().calculate(state, location, size), size);
 			System.out.println((System.nanoTime() - time) / 1_000_000_000.0);
 			running = false;
 		}
@@ -53,7 +54,7 @@ public abstract class Calculable {
 	 * Abstract method that calculates the fractal asynchronously for a given state and size
 	 * @return A double array containing the fractal data
 	 */
-	protected abstract double[] calculate(final FractalState state, final Dimension size);
+	protected abstract double[] calculate(final FractalState state, final FractalLocation location, final Dimension size);
 
 	/**
 	 * Abstract method that gets an array of implemented fractals from an implementation. This may

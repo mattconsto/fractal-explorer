@@ -347,12 +347,11 @@ public class FractalExplorer {
 				double  end        = julia.getEnd();
 				double  top        = julia.getTop();
 				double  bottom     = julia.getBottom();
-				julia.state        = fractal.state.clone();
-				julia.state.seed   = fractal.getSelected();
-				julia.state.start  = start;
-				julia.state.end    = end;
-				julia.state.top    = top;
-				julia.state.bottom = bottom;
+				julia.state           = julia.state.setSeed(fractal.getSelected());
+				julia.location.start  = start;
+				julia.location.end    = end;
+				julia.location.top    = top;
+				julia.location.bottom = bottom;
 				julia.regenerate();
 			}
 		});
@@ -489,9 +488,7 @@ public class FractalExplorer {
 			// Favorite
 			favouriteFractalButton.addActionListener(new ActionListener() {
 				@Override public void actionPerformed(ActionEvent e) {
-					FractalState temp = fractal.getState();
-					temp.coloring = temp.coloring.clone();
-					favourites.add(temp);
+					favourites.add(fractal.getState().setColoring(fractal.getState().coloring.clone()));
 					favouritesPanel.removeAll();
 					favouritesPanel.add(createFavoritesPanel());
 					favouritesPanel.updateUI();
@@ -500,9 +497,7 @@ public class FractalExplorer {
 			
 			favouriteJuliaButton.addActionListener(new ActionListener() {
 				@Override public void actionPerformed(ActionEvent e) {
-					FractalState temp = julia.getState();
-					temp.coloring = temp.coloring.clone();
-					favourites.add(temp);
+					favourites.add(fractal.getState().setColoring(fractal.getState().coloring.clone()));
 					favouritesPanel.removeAll();
 					favouritesPanel.add(createFavoritesPanel());
 					favouritesPanel.updateUI();

@@ -20,6 +20,7 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	MouseWheelListener, KeyListener, Cloneable
 {
 	protected FractalState state = new FractalState();
+	protected FractalLocation location = new FractalLocation();
 	
 	protected Complex   selected      = null;
 	protected Complex   initial       = null;
@@ -61,10 +62,10 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	}
 
 	// Public Getters
-	public double       getBottom       () {return state.bottom;}
+	public double       getBottom       () {return location.bottom;}
 	public boolean      isBuddha        () {return state.buddha;}
 	public Colorable    getColoring     () {return state.coloring;}
-	public double       getEnd          () {return state.end;}
+	public double       getEnd          () {return location.end;}
 	public String       getFractal      () {return state.fractal;}
 	public boolean      isInverse       () {return state.inverse;}
 	public boolean      isInvert        () {return state.invert;}
@@ -75,17 +76,17 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	public Complex      getSeed         () {return state.seed;}
 	public Complex      getSelected     () {return selected;}
 	public boolean      isSmooth        () {return state.smooth;}
-	public double       getStart        () {return state.start;}
+	public double       getStart        () {return location.start;}
 	public FractalState getState        () {return state;}
-	public double       getTop          () {return state.top;}
+	public double       getTop          () {return location.top;}
 	public double       getThreshold    () {return state.threshold;}
 
 	// Public Setters
-	public void setBottom (double  b) {state.bottom = b; regenerate();}
-	public void setBuddha (boolean b) {state.buddha = b; regenerate();}
+	public void setBottom (double  b) {location.bottom = b; regenerate();}
+	public void setBuddha (boolean b) {state = state.setBuddha(b); regenerate();}
 	
 	public void setColoring(Colorable c) {
-		state.coloring = c;
+		state = state.setColoring(c);
 		// A new listener is required.
 		c.addActionListener(new ActionListener() {
 			@Override public void actionPerformed(ActionEvent e) {repaint();}
@@ -93,18 +94,18 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 		repaint();
 	}
 	
-	public void setEnd           (double  e) {state.end           = e; regenerate();}
-	public void setFractal       (String  f) {state.fractal       = f; regenerate();}
-	public void setInverse       (boolean i) {state.inverse       = i; regenerate();}
-	public void setInvert        (boolean i) {state.invert        = i; repaint();   }
-	public void setIterations    (int     i) {state.iterations    = i; regenerate();}
-	public void setOrbitTraps    (String  t) {state.orbitTraps    = t; regenerate();}
-	public void setOrder         (int     o) {state.order         = o; regenerate();}
-	public void setRegionSplits  (String  s) {state.regionSplits  = s; regenerate();}
-	public void setSeed          (Complex s) {state.seed          = s; regenerate();}
-	public void setSelected      (Complex s) {selected            = s; repaint();   }
-	public void setSmooth        (boolean s) {state.smooth        = s; regenerate();}
-	public void setStart         (double  s) {state.start         = s; regenerate();}
+	public void setEnd           (double  e) {location.end = e; regenerate();}
+	public void setFractal       (String  f) {state = state.setFractal(f); regenerate();}
+	public void setInverse       (boolean i) {state = state.setInverse(i); regenerate();}
+	public void setInvert        (boolean i) {state = state.setInvert(i); repaint();   }
+	public void setIterations    (int     i) {state = state.setIterations(i); regenerate();}
+	public void setOrbitTraps    (String  t) {state = state.setOrbitTraps(t); regenerate();}
+	public void setOrder         (int     o) {state = state.setOrder(0); regenerate();}
+	public void setRegionSplits  (String  s) {state = state.setRegionSplits(s); regenerate();}
+	public void setSeed          (Complex s) {state = state.setSeed(s); regenerate();}
+	public void setSelected      (Complex s) {selected = s; repaint();   }
+	public void setSmooth        (boolean s) {state = state.setSmooth(s); regenerate();}
+	public void setStart         (double  s) {location.start = s; regenerate();}
 
 	public void setState(FractalState s) {
 		// We need to clone the state so it isn't shared. If you want it shared, set it.
@@ -113,8 +114,8 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 		regenerate();
 	}
 	
-	public void setTop           (double  t) {state.top           = t; regenerate();}
-	public void setThreshold     (double  t) {state.threshold     = t; regenerate();}
+	public void setTop           (double  t) {location.top = t; regenerate();}
+	public void setThreshold     (double  t) {state = state.setThreshold(t); regenerate();}
 	
 	/**
 	 * Get a complex from an x, y point
@@ -124,8 +125,8 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 */
 	public static Complex getComplexFromPoint(Point p, Fractal f) {
 		return new Complex(
-			f.state.start + (f.state.end - f.state.start)  * p.getX() / f.getWidth(),
-			f.state.top   - (f.state.top - f.state.bottom) * p.getY() / f.getHeight()
+			f.location.start + (f.location.end - f.location.start)  * p.getX() / f.getWidth(),
+			f.location.top   - (f.location.top - f.location.bottom) * p.getY() / f.getHeight()
 		);
 	}
 
@@ -137,8 +138,8 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 */
 	public static Point getPointFromComplex(Complex c, Fractal f) {
 		return new Point(
-			(int) (f.getWidth()  * (c.r - f.state.start) / (f.state.end    - f.state.start)),
-			(int) (f.getHeight() * (c.i - f.state.top)   / (f.state.bottom - f.state.top))
+			(int) (f.getWidth()  * (c.r - f.location.start) / (f.location.end    - f.location.start)),
+			(int) (f.getHeight() * (c.i - f.location.top)   / (f.location.bottom - f.location.top))
 		);
 	}
 	
@@ -146,10 +147,11 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 * Regenerate the fractal.
 	 */
 	public void regenerate() {
+		System.out.println("state: " + state.hashCode());
 		// If we have a size > 0
 		if(getWidth() > 0 && getHeight() > 0) {
 			// Render in a new thread
-			Calculable.calcAsync(state, getSize(), new Callback() {
+			Calculable.calcAsync(state, location, getSize(), new Callback() {
 				@Override public void callback(double[] data, Dimension size) {
 					fractalSize = size;
 					fractalData = data;
@@ -173,22 +175,22 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	 * @param amount The amount we want to zoom
 	 */
 	public void zoom(double amount) {
-		double width  = state.end - state.start;
-		double height = state.top - state.bottom;
+		double width  = location.end - location.start;
+		double height = location.top - location.bottom;
 		
 		Point a = getPointFromComplex(new Complex(
-			state.start  - 0.1 * width  * amount,
-			state.top    + 0.1 * height * amount
+			location.start  - 0.1 * width  * amount,
+			location.top    + 0.1 * height * amount
 		), this);
 		Point b = getPointFromComplex(new Complex(
-			state.end    + 0.1 * width  * amount,
-			state.bottom - 0.1 * height * amount
+			location.end    + 0.1 * width  * amount,
+			location.bottom - 0.1 * height * amount
 		), this);
 		
-		state.start  -= 0.1 * width  * amount;
-		state.end    += 0.1 * width  * amount;
-		state.top    += 0.1 * height * amount;
-		state.bottom -= 0.1 * height * amount;
+		location.start  -= 0.1 * width  * amount;
+		location.end    += 0.1 * width  * amount;
+		location.top    += 0.1 * height * amount;
+		location.bottom -= 0.1 * height * amount;
 		
 		// Fake zoom in, to make it look more responsive.
 		if(zoomReady && fractalData != null) {
@@ -209,22 +211,22 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	}
 	
 	public void move(Complex complex) {
-		double width  = state.end - state.start;
-		double height = state.top - state.bottom;
+		double width  = location.end - location.start;
+		double height = location.top - location.bottom;
 		
 		Point a = getPointFromComplex(new Complex(
-			state.start  - width  * complex.r * 0.1,
-			state.top    + height * complex.i * 0.1
+			location.start  - width  * complex.r * 0.1,
+			location.top    + height * complex.i * 0.1
 		), this);
 		Point b = getPointFromComplex(new Complex(
-			state.end    - width  * complex.r * 0.1,
-			state.bottom + height * complex.i * 0.1
+			location.end    - width  * complex.r * 0.1,
+			location.bottom + height * complex.i * 0.1
 		), this);
 		
-		state.end    -= width  * complex.r * 0.1;
-		state.start  -= width  * complex.r * 0.1;
-		state.bottom += height * complex.i * 0.1;
-		state.top    += height * complex.i * 0.1;
+		location.end    -= width  * complex.r * 0.1;
+		location.start  -= width  * complex.r * 0.1;
+		location.bottom += height * complex.i * 0.1;
+		location.top    += height * complex.i * 0.1;
 
 		// Fake move, to make it look more responsive.
 		if(movementReady && fractalData != null) {
@@ -419,10 +421,10 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			Point a = getPointFromComplex(initial, this);
 			Point b = getPointFromComplex(current, this);
 			if(Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)) > 10) {
-				state.start  = Math.min(initial.r, current.r);
-				state.end    = Math.max(initial.r, current.r);
-				state.top    = Math.min(initial.i, current.i);
-				state.bottom = Math.max(initial.i, current.i);
+				location.start  = Math.min(initial.r, current.r);
+				location.end    = Math.max(initial.r, current.r);
+				location.top    = Math.min(initial.i, current.i);
+				location.bottom = Math.max(initial.i, current.i);
 				
 				// Fake zoom in, to make it look more responsive.
 				if(fractalData != null) {
@@ -471,11 +473,11 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			case 39: case 76: case 68: move(new Complex(-1, 0)); break; // Right
 			case 40: case 75: case 83: move(new Complex(0, -1)); break; // Down
 			case 27: case 36: // Esc, Home. Restores defaults
-				state.start   = -2;
-				state.end     = 2;
-				state.top     = -1.6;
-				state.bottom  = 1.6;
-				state.seed    = null;
+				location.start   = -2;
+				location.end     = 2;
+				location.top     = -1.6;
+				location.bottom  = 1.6;
+				state = state.setSeed(null);
 				regenerate();
 				break;
 			case 45: zoom(1);  break; // Out

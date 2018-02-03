@@ -2,6 +2,7 @@ package mc21g14.fractal.calculable;
 
 import java.awt.Dimension;
 
+import mc21g14.fractal.misc.FractalLocation;
 import mc21g14.fractal.misc.FractalState;
 
 /**
@@ -15,8 +16,8 @@ public class JavaCalculator extends Calculable {
 		return new String[] {"Mandlebrot", "Burning Ship", "Tricorn", "Nova", "Circle"};
 	}
 	
-	protected double[] calculate(final FractalState state, final Dimension size) {
-		if(state.fractal == null) state.fractal = getImplementedFractals()[0];
+	protected double[] calculate(FractalState state, FractalLocation location, Dimension size) {
+		if(state.fractal == null) state = state.setFractal(getImplementedFractals()[0]);
 		
 		// We are storing the results as number of iterations taken. Negative means never reached
 		double[] results = new double[size.width * size.height];
@@ -24,7 +25,7 @@ public class JavaCalculator extends Calculable {
 		// Create threads
 		Thread[] threads = new Thread[Runtime.getRuntime().availableProcessors()];
 		for(int i = 0; i < threads.length; i++) {
-			threads[i] = new Thread(new JavaRunnable(state, size, results, threads.length, i));
+			threads[i] = new Thread(new JavaRunnable(state, location, size, results, threads.length, i));
 			threads[i].start();
 		}
 

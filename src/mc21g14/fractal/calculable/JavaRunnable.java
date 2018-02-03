@@ -4,10 +4,12 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import mc21g14.fractal.misc.Complex;
+import mc21g14.fractal.misc.FractalLocation;
 import mc21g14.fractal.misc.FractalState;
 
 class JavaRunnable implements Runnable {
 	protected FractalState state;
+	protected FractalLocation location;
 	protected Dimension size;
 	
 	protected double[] results;
@@ -16,12 +18,13 @@ class JavaRunnable implements Runnable {
 	protected int total;
 	protected int id;
 	
-	public JavaRunnable(FractalState state, Dimension size, double[] results, int total, int id) {
-		this.state   = state;
-		this.size    = size;
-		this.results = results;
-		this.total   = total;
-		this.id      = id;
+	public JavaRunnable(FractalState state, FractalLocation location, Dimension size, double[] results, int total, int id) {
+		this.state    = state;
+		this.location = location;
+		this.size     = size;
+		this.results  = results;
+		this.total    = total;
+		this.id       = id;
 	}
 	
 	@Override
@@ -34,8 +37,8 @@ class JavaRunnable implements Runnable {
 			for(int y = 0; y < size.height; y++) {
 				// We need a base complex and a past complex for each iteration
 				Complex past = new Complex(
-					state.start + (state.end - state.start) * x / size.width,
-					state.top - (state.top - state.bottom) * y / size.height
+						location.start + (location.end - location.start) * x / size.width,
+						location.top - (location.top - location.bottom) * y / size.height
 				);
 				Complex base = state.seed != null ? state.seed : past;
 				
@@ -80,8 +83,8 @@ class JavaRunnable implements Runnable {
 					
 					if(state.buddha) {
 						// Buddha colouring, slow
-						int j = (int) ((size.width  * (current.r - state.start)) / (state.end	- state.start));
-						int k = (int) ((size.height * (current.i - state.top))   / (state.bottom - state.top));
+						int j = (int) ((size.width  * (current.r - location.start)) / (location.end	- location.start));
+						int k = (int) ((size.height * (current.i - location.top))   / (location.bottom - location.top));
 						
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) {
 							results[k * size.width + j]++;

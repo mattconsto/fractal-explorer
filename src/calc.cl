@@ -32,7 +32,7 @@ struct complex absComplex(struct complex c) {
 struct complex powComplex(struct complex c, int n) {
 	switch (n) {
 			case 0:  return newComplex(1, 0);
-			
+
 			case 1:  return newComplex(c.r, c.i);
 			case 2:  return newComplex(c.r*c.r - c.i*c.i, 2*c.r*c.i);
 			case 3:  return newComplex(c.r*c.r*c.r - 3*c.i*c.i*c.r, 3*c.i*c.r*c.r - c.i*c.i*c.i);
@@ -44,11 +44,11 @@ struct complex powComplex(struct complex c, int n) {
 			case 8:  return powComplex(powComplex(c, 4), 2);
 			case 9:  return powComplex(powComplex(c, 3), 3);
 			case 10: return powComplex(powComplex(c, 5), 2);
-			
+
 			default: {
 				double rn = pown(sqrt(pown(c.r, 2) + pown(c.i, 2)), n);
 				double th = atan(c.i / c.r);
-				
+
 				return newComplex(rn * cos(n * th), rn * sin(n * th));
 			}
 		}
@@ -76,25 +76,25 @@ kernel void fractalKernel(
 	global const double *stop,
 	global const double *top,
 	global const double *bottom,
-	
+
 	global const int    *width,
 	global const int    *height,
 	global const int    *iterations,
-	
+
 	global const double *threshold,
-	
+
 	global const int    *smooth,
-	
+
 	global const double *seedr,
 	global const double *seedi,
-	
+
 	global const int    *selected,
 	global const int    *order,
 	global const int    *inverse,
 	global const int    *buddha,
 	global const int    *orbit,
 	global const int    *region,
-	
+
 	global double *results
 ) {
 	/* For explaination, refer to JavaCalculator.java */
@@ -103,33 +103,33 @@ kernel void fractalKernel(
 	const int id = get_global_id(0);
 	const int x = id % *width;
 	const int y = id / *width;
-	
+
 	/* Check that we should calculate for this pixel */
 	if(y < *height) {
 		struct complex past = newComplex(
 			*start + (*stop   - *start) * x / *width,
 			*top   + (*bottom - *top  ) * y / *height
 		);
-		
+
 		/* Using DBL_MAX to indicate that there is no seed */
 		struct complex base = *seedr == DBL_MAX ? past : newComplex(*seedr, *seedi);
-		
+
 		if(*inverse) {
 			base = invComplex(base);
 			past = invComplex(past);
 		}
-		
+
 		const double t = *threshold * *threshold;
-		
+
 		/* For orbit traps */
 		int    distancelength = *region == 1 ? 5 : (*region == 2 ? 4 : 1);
 		double distance[5];
 		for(int i = 0; i < distancelength; i++) distance[i] = DBL_MAX;
-		
+
 		for(int i = 1; i < *iterations; i++) {
 			/* Square complex1, then add complex2 */
 			struct complex current;
-			
+
 			switch(*selected) {
 				default:
 				case 0: /* Mandlebrot */
@@ -149,7 +149,7 @@ kernel void fractalKernel(
 								subComplex(powComplex(past, *order), newComplex(1, 0))
 							),
 							mulComplex(newComplex(*order, 0), powComplex(past, *order - 1))
-						),		
+						),
 						base
 					);
 					break;
@@ -157,7 +157,7 @@ kernel void fractalKernel(
 					current = powComplex(past, *order);
 					break;
 			}
-				
+
 			/* Modulus */
 			double modulus = mod2Complex(current);
 
@@ -165,7 +165,7 @@ kernel void fractalKernel(
 				// Buddha colouring, slow
 				int j = (int) ((*width  * (current.r - *start)) / (*stop   - *start));
 				int k = (int) ((*height * (current.i - *top))   / (*bottom - *top));
-				
+
 				if(k * *width + j >= 0 && k * *width + j < *width * *height)
 				results[k * *width + j] = results[k * *width + j] + 1;
 			} else if(*orbit) {
@@ -176,14 +176,14 @@ kernel void fractalKernel(
 					if(mod2Complex(current) < distance[i % distancelength])
 						distance[i % distancelength] = mod2Complex(current);
 				}
-				
+
 				int pointer;
 				if(*region == 1) {
 					pointer = (current.i > 0 ? 1 : 0) + (current.r > 0 ? 2 : 0);
 				} else {
 					pointer = i % distancelength;
 				}
-				
+
 				if(i == *iterations - 1) {
 					if(distance[pointer] < 1) {
 						results[y * *width + x] = sqrt(distance[pointer]) * *iterations;
@@ -208,7 +208,7 @@ kernel void fractalKernel(
 					results[y * *width + x] = -1;
 				}
 			}
-			
+
 			/* Copy the new to the old, we will need it later, but by another name */
 			past = current;
 		}
