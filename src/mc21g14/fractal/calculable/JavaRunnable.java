@@ -49,7 +49,6 @@ class JavaRunnable implements Runnable {
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.pow(state.order).add(base);
 
-						// Buddha colouring, slow
 						int j = (int) ((size.width  * (past.r - state.start)) / (state.end    - state.start));
 						int k = (int) ((size.height * (past.i - state.top))   / (state.bottom - state.top));
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) results[i]++;
@@ -59,7 +58,6 @@ class JavaRunnable implements Runnable {
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.abs().pow(state.order).add(base);
 
-						// Buddha colouring, slow
 						int j = (int) ((size.width  * (past.r - state.start)) / (state.end    - state.start));
 						int k = (int) ((size.height * (past.i - state.top))   / (state.bottom - state.top));
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) results[i]++;
@@ -69,7 +67,6 @@ class JavaRunnable implements Runnable {
 					for(int it = 1; it < state.iterations; it++) {
 						past = new Complex(past.r, past.i * -1).pow(state.order).add(base);
 
-						// Buddha colouring, slow
 						int j = (int) ((size.width  * (past.r - state.start)) / (state.end    - state.start));
 						int k = (int) ((size.height * (past.i - state.top))   / (state.bottom - state.top));
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) results[i]++;
@@ -79,7 +76,6 @@ class JavaRunnable implements Runnable {
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.subtract(new Complex(1, 0).multiply(past.pow(state.order).subtract(new Complex(1, 0))).divide(new Complex(state.order, 0).multiply(past.pow(state.order - 1)))).add(base);
 
-						// Buddha colouring, slow
 						int j = (int) ((size.width  * (past.r - state.start)) / (state.end    - state.start));
 						int k = (int) ((size.height * (past.i - state.top))   / (state.bottom - state.top));
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) results[i]++;
@@ -89,7 +85,6 @@ class JavaRunnable implements Runnable {
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.pow(state.order);
 
-						// Buddha colouring, slow
 						int j = (int) ((size.width  * (past.r - state.start)) / (state.end    - state.start));
 						int k = (int) ((size.height * (past.i - state.top))   / (state.bottom - state.top));
 						if(k * size.width + j >= 0 && k * size.width + j < size.width * size.height) results[i]++;
@@ -129,14 +124,10 @@ class JavaRunnable implements Runnable {
 						} else {
 							if(past.modulusSquared() < distance[it % distance.length]) distance[it % distance.length] = past.modulusSquared();
 						}
-
-						int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : it % distance.length;
-
-						if(i == state.iterations - 1 && distance[pointer] < 1) {
-							results[i] = Math.sqrt(distance[pointer]) * state.iterations;
-							break;
-						}
 					}
+
+					int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : (state.iterations - 1) % distance.length;
+					if(distance[pointer] < 1) results[i] = Math.sqrt(distance[pointer]) * state.iterations;
 				} break;
 				case "Burning Ship": {
 					for(int it = 1; it < state.iterations; it++) {
@@ -149,14 +140,10 @@ class JavaRunnable implements Runnable {
 						} else {
 							if(past.modulusSquared() < distance[it % distance.length]) distance[it % distance.length] = past.modulusSquared();
 						}
-
-						int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : it % distance.length;
-
-						if(i == state.iterations - 1 && distance[pointer] < 1) {
-							results[i] = Math.sqrt(distance[pointer]) * state.iterations;
-							break;
-						}
 					}
+
+					int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : (state.iterations - 1) % distance.length;
+					if(distance[pointer] < 1) results[i] = Math.sqrt(distance[pointer]) * state.iterations;
 				} break;
 				case "Tricorn": {
 					for(int it = 1; it < state.iterations; it++) {
@@ -169,14 +156,10 @@ class JavaRunnable implements Runnable {
 						} else {
 							if(past.modulusSquared() < distance[it % distance.length]) distance[it % distance.length] = past.modulusSquared();
 						}
-
-						int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : it % distance.length;
-
-						if(i == state.iterations - 1 && distance[pointer] < 1) {
-							results[i] = Math.sqrt(distance[pointer]) * state.iterations;
-							break;
-						}
 					}
+
+					int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : (state.iterations - 1) % distance.length;
+					if(distance[pointer] < 1) results[i] = Math.sqrt(distance[pointer]) * state.iterations;
 				} break;
 				case "Nova": {
 					for(int it = 1; it < state.iterations; it++) {
@@ -189,14 +172,10 @@ class JavaRunnable implements Runnable {
 						} else {
 							if(past.modulusSquared() < distance[it % distance.length]) distance[it % distance.length] = past.modulusSquared();
 						}
-
-						int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : it % distance.length;
-
-						if(i == state.iterations - 1 && distance[pointer] < 1) {
-							results[i] = Math.sqrt(distance[pointer]) * state.iterations;
-							break;
-						}
 					}
+
+					int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : (state.iterations - 1) % distance.length;
+					if(distance[pointer] < 1) results[i] = Math.sqrt(distance[pointer]) * state.iterations;
 				} break;
 				case "Circle": {
 					for(int it = 1; it < state.iterations; it++) {
@@ -209,14 +188,10 @@ class JavaRunnable implements Runnable {
 						} else {
 							if(past.modulusSquared() < distance[it % distance.length]) distance[it % distance.length] = past.modulusSquared();
 						}
-
-						int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : it % distance.length;
-
-						if(i == state.iterations - 1 && distance[pointer] < 1) {
-							results[i] = Math.sqrt(distance[pointer]) * state.iterations;
-							break;
-						}
 					}
+
+					int pointer = state.regionSplits.equals("Iterations") ? (past.i > 0 ? 1 : 0) + (past.r > 0 ? 2 : 0) : (state.iterations - 1) % distance.length;
+					if(distance[pointer] < 1) results[i] = Math.sqrt(distance[pointer]) * state.iterations;
 				} break;
 				default:
 					throw new UnsupportedOperationException(state.fractal + " isn't implemented");
@@ -242,9 +217,10 @@ class JavaRunnable implements Runnable {
 			// For smoothness
 			Complex current;
 
+			results[i] = -1;
+
 			switch(state.fractal) {
 				case "Mandlebrot": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						current = past.pow(state.order).add(base);
 
@@ -258,7 +234,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Burning Ship": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						current = new Complex(Math.abs(past.r), Math.abs(past.i)).pow(state.order).add(base);
 
@@ -272,7 +247,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Tricorn": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						current = new Complex(past.r, past.i * -1).pow(state.order).add(base);
 
@@ -286,7 +260,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Nova": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						current = past.subtract(new Complex(1, 0).multiply(past.pow(state.order).subtract(new Complex(1, 0))).divide(new Complex(state.order, 0).multiply(past.pow(state.order - 1)))).add(base);
 
@@ -300,7 +273,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Circle": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						current = past.pow(state.order);
 
@@ -334,9 +306,10 @@ class JavaRunnable implements Runnable {
 			// Inverse the base value, for pretty images
 			if(state.inverse) {base = base.inverse(); past = past.inverse();}
 
+			results[i] = -1;
+
 			switch(state.fractal) {
 				case "Mandlebrot": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.pow(state.order).add(base);
 
@@ -347,7 +320,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Burning Ship": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.abs().pow(state.order).add(base);
 
@@ -358,7 +330,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Tricorn": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						past = new Complex(past.r, past.i * -1).pow(state.order).add(base);
 
@@ -369,7 +340,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Nova": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.subtract(new Complex(1, 0).multiply(past.pow(state.order).subtract(new Complex(1, 0))).divide(new Complex(state.order, 0).multiply(past.pow(state.order - 1)))).add(base);
 
@@ -380,7 +350,6 @@ class JavaRunnable implements Runnable {
 					}
 				} break;
 				case "Circle": {
-					results[i] = -1;
 					for(int it = 1; it < state.iterations; it++) {
 						past = past.pow(state.order);
 

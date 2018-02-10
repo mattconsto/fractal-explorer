@@ -4,6 +4,8 @@ import java.awt.Dimension;
 
 import mc21g14.fractal.misc.FractalState;
 
+import javax.swing.*;
+
 /**
  * Abstract class for the different supported calculation backends
  * 
@@ -25,7 +27,11 @@ public abstract class Calculable {
 			final long time = System.nanoTime();
 			new Thread() {
 				public void run() {
-					call.callback(getInstance().calculate(state, size), size);
+					try {
+						call.callback(getInstance().calculate(state, size), size);
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage() + ":\n" + e.getStackTrace().toString(), "Error Calculating! Try Switching Renderer.", JOptionPane.ERROR_MESSAGE);
+					}
 					System.out.println("Took " + (System.nanoTime() - time) / 1_000_000_000.0);
 				};
 			}.start();
@@ -43,7 +49,11 @@ public abstract class Calculable {
 		if(!running) {
 			running = true;
 			final long time = System.nanoTime();
-			call.callback(getInstance().calculate(state, size), size);
+			try {
+				call.callback(getInstance().calculate(state, size), size);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e.getMessage() + ":\n" + e.getStackTrace().toString(), "Error Calculating! Try Switching Renderer.", JOptionPane.ERROR_MESSAGE);
+			}
 			System.out.println((System.nanoTime() - time) / 1_000_000_000.0);
 			running = false;
 		}
