@@ -68,7 +68,8 @@ struct complex divComplex(struct complex a, struct complex b) {
 }
 
 struct complex invComplex(struct complex c) {
-	return divComplex(newComplex(1, 0), c);
+	double inter = c.r*c.r + c.i*c.i;
+	return newComplex(c/inter, (0 - c.i)/inter);
 }
 
 kernel void fractalKernel(
@@ -76,25 +77,25 @@ kernel void fractalKernel(
 	global const double *stop,
 	global const double *top,
 	global const double *bottom,
-	
+
 	global const int    *width,
 	global const int    *height,
 	global const int    *iterations,
-	
+
 	global const double *threshold,
-	
+
 	global const int    *smooth,
-	
+
 	global const double *seedr,
 	global const double *seedi,
-	
+
 	global const int    *selected,
 	global const int    *order,
 	global const int    *inverse,
 	global const int    *buddha,
 	global const int    *orbit,
 	global const int    *region,
-	
+
 	global double *results
 ) {
 	/* For explaination, refer to JavaCalculator.java */
@@ -103,33 +104,33 @@ kernel void fractalKernel(
 	const int id = get_global_id(0);
 	const int x = id % *width;
 	const int y = id / *width;
-	
+
 	/* Check that we should calculate for this pixel */
 	if(y < *height) {
 		struct complex past = newComplex(
 			*start + (*stop   - *start) * x / *width,
 			*top   + (*bottom - *top  ) * y / *height
 		);
-		
+
 		/* Using DBL_MAX to indicate that there is no seed */
 		struct complex base = *seedr == DBL_MAX ? past : newComplex(*seedr, *seedi);
-		
+
 		if(*inverse) {
 			base = invComplex(base);
 			past = invComplex(past);
 		}
-		
+
 		const double t = *threshold * *threshold;
-		
+
 		/* For orbit traps */
 		int    distancelength = *region == 1 ? 5 : (*region == 2 ? 4 : 1);
 		double distance[5];
 		for(int i = 0; i < distancelength; i++) distance[i] = DBL_MAX;
-		
+
 		for(int i = 1; i < *iterations; i++) {
 			/* Square complex1, then add complex2 */
 			struct complex current;
-			
+
 			switch(*selected) {
 				default:
 				case 0: /* Mandlebrot */
@@ -149,7 +150,7 @@ kernel void fractalKernel(
 								subComplex(powComplex(past, *order), newComplex(1, 0))
 							),
 							mulComplex(newComplex(*order, 0), powComplex(past, *order - 1))
-						),		
+						),
 						base
 					);
 					break;
