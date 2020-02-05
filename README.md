@@ -22,15 +22,15 @@ A Java, GPU accelerated fractal explorer.
 
 ### Keyboard
 
-| Shortcut  | Description                                                                          |
-|-----------|--------------------------------------------------------------------------------------|
-| Home/Esc  | Return to start of the fractal, useful if you are too deep and you want out          |
-| W/I/Up    | Move the camera up to reveal the parts of the fractal that are above                 |
-| S/K/Down  | Move the camera down to reveal the parts of the fractal that are below               |
-| A/J/Left  | Move the camera left to reveal the parts of the fractal that are left                |
-| D/L/Right | Move the camera right to reveal the parts of the fractal that are right              |
-| +         | Zoom in to the fractal                                                               |
-| -         | Zoom out of the fractal                                                              |
+| Shortcut    | Description                                                                          |
+|-------------|--------------------------------------------------------------------------------------|
+| H/Home/Esc  | Return to start of the fractal, useful if you are too deep and you want out          |
+| W/I/Up      | Move the camera up to reveal the parts of the fractal that are above                 |
+| S/K/Down    | Move the camera down to reveal the parts of the fractal that are below               |
+| A/J/Left    | Move the camera left to reveal the parts of the fractal that are left                |
+| D/L/Right   | Move the camera right to reveal the parts of the fractal that are right              |
+| +           | Zoom in to the fractal                                                               |
+| -           | Zoom out of the fractal                                                              |
 
 ### Mouse
 
