@@ -10,6 +10,8 @@ import mc21g14.fractal.colorable.*;
  * @author Matthew Consterdine
  */
 public class FractalState implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	/*
 	 * Here is our state
 	 */

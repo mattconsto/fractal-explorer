@@ -8,6 +8,8 @@ import java.io.Serializable;
  * @author Matthew Consterdine
  */
 public class Complex implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public final double r;
 	public final double i;
 
@@ -27,7 +29,7 @@ public class Complex implements Cloneable, Serializable {
 	 * @return This number to the order provided
 	 */
 	public Complex pow(int n) {
-		// Some values are hardcoded for speed, avoids the pow and square rooting.
+		// Some values are hard-coded for speed, avoids the pow and square rooting.
 		switch (n) {
 			case 0:  return new Complex(1, 0);
 
@@ -48,7 +50,7 @@ public class Complex implements Cloneable, Serializable {
 				// Lets us use pretty, negative powers and large positive ones
 				// http://stackoverflow.com/a/3099602
 				double rn = Math.pow(Math.sqrt(Math.pow(r, 2) + Math.pow(i, 2)), n);
-				double th = Math.atan(i / r);
+				double th = Math.atan2(i, r);
 
 				return new Complex(rn * Math.cos(n * th), rn * Math.sin(n * th));
 		}

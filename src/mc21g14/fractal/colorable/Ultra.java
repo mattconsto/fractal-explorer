@@ -20,6 +20,8 @@ import mc21g14.fractal.misc.UserConfigurable;
  * @author Matthew Consterdine
  */
 public class Ultra extends Colorable implements UserConfigurable {
+	private static final long serialVersionUID = 1L;
+
 	protected double stretch;
 	protected JPanel panel = null;
 	protected ArrayList<Color> colors = new ArrayList<Color>();
@@ -49,7 +51,7 @@ public class Ultra extends Colorable implements UserConfigurable {
 	}
 	
 	@Override
-	public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, double pixelWidth, int iterations) {
 		int[] results = new int[3 * data.length];
 		
 		for(int i = 0; i < data.length; i++) {

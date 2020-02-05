@@ -17,6 +17,8 @@ import mc21g14.fractal.misc.UserConfigurable;
  * @author Matthew Consterdine
  */
 public class Fire extends Colorable implements Serializable, UserConfigurable {
+	private static final long serialVersionUID = 1L;
+
 	protected Color  base;
 	protected JPanel panel;
 	
@@ -36,7 +38,7 @@ public class Fire extends Colorable implements Serializable, UserConfigurable {
 	}
 
 	@Override
-	public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, double pixelWidth, int iterations) {
 		// We need valid colors
 		if(base  == null) throw new InvalidParameterException("Base  cannot be null!");
 		

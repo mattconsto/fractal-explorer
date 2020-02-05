@@ -16,6 +16,8 @@ import mc21g14.fractal.misc.UserConfigurable;
  * @author Matthew Consterdine
  */
 public class Binary extends Colorable implements Serializable, UserConfigurable {
+	private static final long serialVersionUID = 1L;
+
 	protected Color  base;
 	protected Color  limit;
 	protected JPanel panel;
@@ -38,7 +40,7 @@ public class Binary extends Colorable implements Serializable, UserConfigurable 
 	}
 	
 	@Override
-	public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, double pixelWidth, int iterations) {
 		// We need valid colors
 		if(base  == null) throw new InvalidParameterException("Base  cannot be null!");
 		if(limit == null) throw new InvalidParameterException("Limit cannot be null!");

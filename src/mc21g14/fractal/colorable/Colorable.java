@@ -11,15 +11,18 @@ import javax.swing.event.EventListenerList;
  * @author Matthew Consterdine
  */
 public abstract class Colorable implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	protected EventListenerList listenerList = new EventListenerList();
 	
 	/**
 	 * Convert a double array containing a series of iterations to rgb values
 	 * @param data data
+	 * @param pixelWidth Width of the data in pixels
 	 * @param iterations Maximum iterations reached
 	 * @return RGB formatted int array
 	 */
-	public abstract int[] iterationsToRGB(double[] data, int iterations);
+	public abstract int[] iterationsToRGB(double[] data, double pixelWidth, int iterations);
 	
 	/**
 	 * List colorable implementations
@@ -27,7 +30,7 @@ public abstract class Colorable implements Cloneable, Serializable {
 	 */
 	public static Colorable[] getImplementations() {
 		return new Colorable[] {
-			new Binary(), new Fire(), new Gradient(), new HueShift(), new Stepped(), new Ultra()
+			new Binary(), new Fire(), new Gradient(), new HueShift(), new Stepped(), new Ultra(), new PenPlot()
 		};
 	}
 	

@@ -15,6 +15,8 @@ import mc21g14.fractal.misc.UserConfigurable;
  * @author Matthew Consterdine
  */
 public class Stepped extends Colorable implements Serializable, UserConfigurable {
+	private static final long serialVersionUID = 1L;
+
 	protected int maximum;
 	protected double stretch;
 	protected JPanel panel = null;
@@ -38,7 +40,7 @@ public class Stepped extends Colorable implements Serializable, UserConfigurable
 	}
 	
 	@Override
-	public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, double pixelWidth, int iterations) {
 		int[] results = new int[3 * data.length];
 
 		// We need to fill the colors array if we don't have enough

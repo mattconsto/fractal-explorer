@@ -19,6 +19,8 @@ import mc21g14.fractal.colorable.*;
 public class Fractal extends JPanel implements MouseListener, MouseMotionListener, 
 	MouseWheelListener, KeyListener, Cloneable
 {
+	private static final long serialVersionUID = 1L;
+
 	protected FractalState state = new FractalState();
 	
 	protected Complex   selected      = null;
@@ -310,8 +312,8 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			(int) fractalSize.getWidth(),
 			(int) fractalSize.getHeight(),
 			state.invert
-				? invertArray(state.coloring.iterationsToRGB(fractalData, state.iterations), 255)
-				: state.coloring.iterationsToRGB(fractalData, state.iterations));
+				? invertArray(state.coloring.iterationsToRGB(fractalData, fractalSize.getWidth(), state.iterations), 255)
+				: state.coloring.iterationsToRGB(fractalData, fractalSize.getWidth(), state.iterations));
 		g2d.drawImage(image,
 			0, 0, getWidth(),       getHeight(),
 			0, 0, image.getWidth(), image.getHeight(),
@@ -470,7 +472,7 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 			case 38: case 73: case 87: move(new Complex(0,  1)); break; // Up
 			case 39: case 76: case 68: move(new Complex(-1, 0)); break; // Right
 			case 40: case 75: case 83: move(new Complex(0, -1)); break; // Down
-			case 27: case 36: // Esc, Home. Restores defaults
+			case 27: case 36: case 72: // Esc, Home, h. Restores defaults
 				state.start   = -2;
 				state.end     = 2;
 				state.top     = -1.6;
@@ -532,11 +534,11 @@ public class Fractal extends JPanel implements MouseListener, MouseMotionListene
 	@Override public void mouseMoved  (MouseEvent e) {}
 	@Override public void mousePressed(MouseEvent e) {}
 	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Fractal");
-		frame.add(new Fractal());
-		frame.setSize(800, 600);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	}
+    public static void main(String[] args) {
+	    JFrame frame = new JFrame("Fractal");
+	    frame.add(new Fractal());
+	    frame.setSize(800, 600);
+	    frame.setLocationRelativeTo(null);
+	    frame.setVisible(true);
+    }
 }

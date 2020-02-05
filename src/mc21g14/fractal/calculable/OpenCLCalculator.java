@@ -115,19 +115,19 @@ public class OpenCLCalculator extends Calculable {
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.end}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.top}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.bottom}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{size.width}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{size.height}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.iterations}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{size.width}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{size.height}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{state.iterations}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.threshold}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.smooth ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{state.smooth ? 1 : 0}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.seed != null ? state.seed.r : Double.MAX_VALUE}), null),
 			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_double, Pointer.to(new double[]{state.seed != null ? state.seed.i : Double.MAX_VALUE}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{fractalIndex}), null),//selected
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.order}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.inverse ? 1 : 0}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{state.buddha ? 1 : 0}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{orbitIndex}), null),
-			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int   []{regionIndex}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{fractalIndex}), null),//selected
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{state.order}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{state.inverse ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{state.buddha ? 1 : 0}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{orbitIndex}), null),
+			clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, Sizeof.cl_int,	Pointer.to(new int[]{regionIndex}), null),
 			clCreateBuffer(context, CL_MEM_WRITE_ONLY, Sizeof.cl_double * size.width * size.height, null, null)
 		};
 		
@@ -148,7 +148,6 @@ public class OpenCLCalculator extends Calculable {
 	
 	protected void finalize() throws Throwable {
 		// OpenCL requires a cleanup after it runs
-		super.finalize();
 		clReleaseCommandQueue(queue);
 		clReleaseContext(context);
 		clReleaseKernel(kernel);

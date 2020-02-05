@@ -15,6 +15,8 @@ import mc21g14.fractal.misc.UserConfigurable;
  * @author Matthew Consterdine
  */
 public class HueShift extends Colorable implements Serializable, UserConfigurable {
+	private static final long serialVersionUID = 1L;
+
 	protected float  hue;
 	protected JPanel panel;
 	
@@ -34,7 +36,7 @@ public class HueShift extends Colorable implements Serializable, UserConfigurabl
 	}
 	
 	@Override
-	public int[] iterationsToRGB(double[] data, int iterations) {
+	public int[] iterationsToRGB(double[] data, double pixelWidth, int iterations) {
 		int[] results = new int[3 * data.length];
 		
 		for(int i = 0; i < data.length; i++) {

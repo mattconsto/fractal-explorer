@@ -13,6 +13,8 @@ import javax.swing.border.*;
  * @author Matthew Consterdine
  */
 public class ColorPicker extends JComponent implements MouseListener, MouseMotionListener {
+	private static final long serialVersionUID = 1L;
+
 	public float hue = 0;
 	public float sat = 1;
 	public float bri = 1;
