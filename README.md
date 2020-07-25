@@ -3,7 +3,7 @@ Fractal Explorer
 
 A Java, GPU accelerated fractal explorer.
 
-![](screenshot.png)
+[![](screenshot.png)](https://mattconsto.itch.io/fractal-explorer)
 
 # Usage
 
